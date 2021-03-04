@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<pages:Page xmlns:fx="http://ns.adobe.com/mxml/2009"
+            xmlns:s="library://ns.adobe.com/flex/spark"
+            xmlns:pages="ui.pages.*"
+            creationComplete="onCreationComplete(event)">
+
+    <fx:Script><![CDATA[
+        import data.EngineData;
+        import data.EngineManager;
+
+        import mx.collections.ArrayCollection;
+
+        import mx.collections.ArrayCollection;
+
+        import mx.collections.ArrayCollection;
+        import mx.events.CollectionEvent;
+        import mx.events.FlexEvent;
+
+        import spark.collections.Sort;
+        import spark.collections.SortField;
+
+        private var availableEngines:ArrayCollection;
+        private var installedEngines:ArrayCollection;
+
+        private function onCreationComplete(event:FlexEvent):void
+        {
+            var sortByDate:Sort = new Sort();
+            sortByDate.fields = [new SortField("date", true)];
+
+            availableEngines = new ArrayCollection(EngineManager.instance.engines);
+            availableEngines.sort = sortByDate;
+            listAvailableEngines.dataProvider = availableEngines;
+
+            installedEngines = new ArrayCollection(EngineManager.instance.engines);
+            listInstalledEngines.dataProvider = installedEngines;
+            installedEngines.filterFunction = filterByInstall;
+            installedEngines.refresh();
+
+            EngineManager.instance.addEventListener(EngineManager.ENGINES_CHANGED, onEnginesChanged);
+        }
+
+        override public function dispose():void
+        {
+            super.dispose();
+
+            EngineManager.instance.removeEventListener(EngineManager.ENGINES_CHANGED, onEnginesChanged);
+        }
+
+        private function onEnginesChanged(event:Event):void
+        {
+            installedEngines.refresh();
+        }
+
+        private function filterByInstall(engineData:EngineData):Boolean
+        {
+            return engineData.installDirectory.exists;
+        }
+        ]]></fx:Script>
+
+    <s:VGroup width="100%"
+              height="100%"
+              gap="15">
+        <s:Label styleName="pageTitle"
+                 text="Engine"/>
+        <s:HGroup width="100%"
+                  height="100%"
+                  gap="15">
+            <s:VGroup width="400"
+                      height="100%"
+                      gap="15">
+                <s:Panel skinClass="ui.skins.PanelSkinOutline"
+                         width="100%">
+                    <s:VGroup width="100%">
+                        <s:Label width="100%"
+                                 text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Purus faucibus ornare suspendisse sed nisi lacus sed viverra. Ultrices in iaculis nunc sed augue."/>
+                    </s:VGroup>
+                </s:Panel>
+                <s:Panel width="100%"
+                         height="100%"
+                         skinClass="ui.skins.PanelSkinPageSection">
+                    <s:VGroup width="100%"
+                              height="100%"
+                              padding="10"
+                              gap="10">
+                        <s:Label text="Installed"/>
+                        <s:List id="listInstalledEngines"
+                                useVirtualLayout="false"
+                                width="100%"
+                                height="100%"
+                                contentBackgroundAlpha="0"
+                                borderVisible="false"
+                                itemRenderer="ui.itemRenderers.GridItemRendererEngine">
+                            <s:layout>
+                                <s:VerticalLayout gap="10"/>
+                            </s:layout>
+                        </s:List>
+                    </s:VGroup>
+                </s:Panel>
+            </s:VGroup>
+
+            <s:Panel width="100%"
+                     height="100%"
+                     skinClass="ui.skins.PanelSkinPageSection">
+                <s:VGroup width="100%"
+                          height="100%"
+                          padding="10"
+                          gap="10">
+                    <s:Label text="All Versions"/>
+                    <s:List id="listAvailableEngines"
+                            useVirtualLayout="false"
+                            width="100%"
+                            height="100%"
+                            contentBackgroundAlpha="0"
+                            borderVisible="false"
+                            horizontalScrollPolicy="off"
+                            itemRenderer="ui.itemRenderers.GridItemRendererEngine">
+                        <s:layout>
+                            <s:TileLayout columnAlign="justifyUsingWidth"
+                                          horizontalGap="10"
+                                          verticalGap="10"/>
+                        </s:layout>
+                    </s:List>
+                </s:VGroup>
+
+            </s:Panel>
+        </s:HGroup>
+    </s:VGroup>
+</pages:Page>

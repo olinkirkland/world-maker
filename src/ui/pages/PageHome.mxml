@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<pages:Page xmlns:fx="http://ns.adobe.com/mxml/2009"
+            xmlns:pages="ui.pages.*"
+            xmlns:s="library://ns.adobe.com/flex/spark">
+    <s:Label text="Home"/>
+</pages:Page>

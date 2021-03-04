@@ -1,0 +1,269 @@
+<?xml version="1.0"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+                       xmlns:s="library://ns.adobe.com/flex/spark"
+                       xmlns:components="ui.components.*"
+                       showStatusBar="false"
+                       frameRate="60"
+                       width="1280"
+                       height="720"
+                       creationComplete="onCreationComplete(event)">
+
+    <fx:Style source="/assets/css/global.css"/>
+
+    <fx:Script><![CDATA[
+        import data.EngineManager;
+
+        import global.Color;
+        import global.Icons;
+        import global.Settings;
+
+        import mx.collections.ArrayCollection;
+        import mx.events.FlexEvent;
+        import mx.utils.UIDUtil;
+
+        import spark.events.IndexChangeEvent;
+
+        import ui.pages.Page;
+        import ui.pages.PageEngine;
+        import ui.pages.PageHome;
+        import ui.pages.PageProjects;
+        import ui.pages.PageSettings;
+
+        private var pages:Object;
+        private var currentPage:Page;
+
+        private var showEngineBadge:Boolean = false;
+
+        private function onCreationComplete(event:FlexEvent):void
+        {
+            preload();
+        }
+
+        private function clearDownloadsDirectory():void
+        {
+            // todo
+        }
+
+        private function preload():void
+        {
+            var url:String = Settings.distro + "meta.json?" + UIDUtil.createUID();
+            var urlStream:URLStream = new URLStream();
+            var fileStream:FileStream = new FileStream();
+            var file:File = File.applicationStorageDirectory.resolvePath("meta.json");
+            var metaJson:String;
+
+            if (file.exists)
+            {
+                fileStream.open(file, FileMode.READ);
+                metaJson = fileStream.readUTFBytes(fileStream.bytesAvailable);
+                fileStream.close();
+            }
+
+            var meta:Object = metaJson ? JSON.parse(metaJson) : null;
+
+            urlStream.load(new URLRequest(url));
+
+            labelPreloaderSource.text = url;
+            labelPreloaderTarget.text = file.url;
+
+            urlStream.addEventListener(Event.COMPLETE, function (event:Event)
+            {
+                // Metadata downloaded
+                var newMetaJson:String = urlStream.readUTFBytes(urlStream.bytesAvailable);
+                var newMeta:Object = JSON.parse(newMetaJson);
+                if (newMetaJson != metaJson)
+                {
+                    // The new Metadata is different
+                    // Check if there is a new version
+                    showEngineBadge = !meta || newMeta.versions.length > meta.versions.length;
+                }
+
+                meta = newMeta;
+
+                fileStream.openAsync(file, FileMode.WRITE);
+                fileStream.writeUTFBytes(newMetaJson);
+                fileStream.close();
+
+                EngineManager.instance.populate(meta.versions);
+
+                clearDownloadsDirectory();
+
+                finishPreload();
+            });
+
+            urlStream.addEventListener(IOErrorEvent.IO_ERROR, function (event:IOErrorEvent):void
+            {
+                // Error downloading Metadata
+                finishPreload();
+            });
+        }
+
+        private function finishPreload():void
+        {
+            pages = {
+                home: new PageHome(),
+                projects: new PageProjects(),
+                engine: new PageEngine(),
+                settings: new PageSettings()
+            };
+
+            buttonBarNavigation.dataProvider = new ArrayCollection([
+                {label: "Home", id: "home"},
+                {label: "Projects", id: "projects"},
+                {label: "Engine", id: "engine"},
+                {label: "Settings", id: "settings"}]);
+
+            validatePageNavigation();
+
+            setTimeout(function ():void
+            {
+                preloader.visible = false;
+                buttonBarNavigation.selectedIndex = 2;
+                onChangeNavigation(null);
+            }, 100);
+        }
+
+        private function validatePageNavigation():void
+        {
+            var engineTab:Object = buttonBarNavigation.dataProvider.getItemAt(2);
+            engineTab.showBadge = showEngineBadge;
+            buttonBarNavigation.dataProvider.itemUpdated(engineTab);
+        }
+
+        private function onChangeNavigation(event:IndexChangeEvent):void
+        {
+            selectPageByType(buttonBarNavigation.selectedItem.id);
+        }
+
+        private function selectPageByType(type:String):void
+        {
+            currentPage = pages[type];
+
+            groupPage.removeAllElements();
+            groupPage.addElement(currentPage);
+
+            if (type == "engine")
+                showEngineBadge = false;
+
+            validatePageNavigation();
+        }
+        ]]></fx:Script>
+
+    <s:Rect width="100%"
+            height="100%">
+        <s:fill>
+            <s:SolidColor color="{Color.fillLow}"/>
+        </s:fill>
+    </s:Rect>
+
+    <!--Frame contains the navigation bar at the top and the selected page below-->
+    <s:VGroup width="100%"
+              height="100%"
+              padding="10">
+
+        <!--Navigation bar-->
+        <s:HGroup width="100%"
+                  padding="25"
+                  verticalAlign="middle">
+
+            <s:HGroup height="100%"
+                      verticalAlign="middle"
+                      gap="5">
+                <s:Label text="Worldmaker"
+                         fontSize="24"
+                         fontFamily="Logo"
+                         color="{Color.themePrimary}"/>
+                <components:ColorBitmapImage source="{Icons.Pen}"
+                                             color="{Color.themePrimary}"
+                                             width="16"
+                                             height="16"/>
+            </s:HGroup>
+
+            <s:Spacer width="100%"/>
+
+            <s:ButtonBar id="buttonBarNavigation"
+                         change="{onChangeNavigation(event)}"
+                         requireSelection="true"
+                         labelField="label"/>
+        </s:HGroup>
+
+        <!--Contains selected page-->
+        <s:HGroup id="groupPage"
+                  width="100%"
+                  height="100%"
+                  padding="15">
+        </s:HGroup>
+
+    </s:VGroup>
+
+    <!--Preloader-->
+    <s:Group id="preloader"
+             width="100%"
+             height="100%">
+
+        <s:Rect width="100%"
+                height="100%">
+            <s:fill>
+                <s:SolidColor color="{Color.fillLow}"/>
+            </s:fill>
+        </s:Rect>
+
+        <s:VGroup width="100%"
+                  height="100%"
+                  horizontalAlign="center"
+                  verticalAlign="middle">
+
+            <s:Group>
+
+                <s:Rect width="100%"
+                        height="100%"
+                        radiusX="5"
+                        radiusY="5">
+                    <s:fill>
+                        <s:SolidColor color="{Color.fillMedium}"/>
+                    </s:fill>
+                </s:Rect>
+
+                <s:VGroup width="100%"
+                          height="100%"
+                          horizontalAlign="center"
+                          verticalAlign="middle"
+                          padding="25"
+                          gap="10">
+                    <s:Label text="Worldmaker"
+                             fontSize="42"
+                             fontFamily="Logo"
+                             color="{Color.themePrimary}"/>
+                    <components:ColorBitmapImage source="{Icons.Pen}"
+                                                 color="{Color.themePrimary}"
+                                                 width="24"
+                                                 height="24"/>
+                </s:VGroup>
+
+            </s:Group>
+
+        </s:VGroup>
+
+        <s:VGroup width="100%"
+                  height="100%"
+                  horizontalAlign="center"
+                  verticalAlign="bottom"
+                  padding="10">
+            <s:HGroup width="100%"
+                      horizontalAlign="center"
+                      verticalAlign="middle">
+                <s:Label id="labelPreloaderSource"
+                         color="{Color.textMedium}"/>
+                <components:ColorBitmapImage id="imageDownload"
+                                             source="{Icons.Cloud}"
+                                             color="{Color.themePrimary}"
+                                             width="16"
+                                             height="16"/>
+                <s:Label id="labelPreloaderTarget"
+                         color="{Color.themePrimary}"/>
+            </s:HGroup>
+        </s:VGroup>
+
+    </s:Group>
+
+</s:WindowedApplication>
