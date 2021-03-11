@@ -6,12 +6,17 @@
                        frameRate="60"
                        width="1280"
                        height="720"
+                       tabChildren="false"
                        creationComplete="onCreationComplete(event)">
 
     <fx:Style source="/assets/css/global.css"/>
 
     <fx:Script><![CDATA[
         import data.EngineManager;
+        import data.PopupManager;
+        import data.Signal;
+
+        import events.PopupEvent;
 
         import global.Color;
         import global.Icons;
@@ -21,6 +26,8 @@
         import mx.events.FlexEvent;
         import mx.utils.UIDUtil;
 
+        import spark.events.ElementExistenceEvent;
+
         import spark.events.IndexChangeEvent;
 
         import ui.pages.Page;
@@ -28,6 +35,8 @@
         import ui.pages.PageHome;
         import ui.pages.PageProjects;
         import ui.pages.PageSettings;
+        import ui.popups.Popup;
+        import ui.popups.PopupLoading;
 
         private var pages:Object;
         private var currentPage:Page;
@@ -36,17 +45,28 @@
 
         private function onCreationComplete(event:FlexEvent):void
         {
+            addEventListeners();
+
+            clearDownloadsDirectory();
             preload();
         }
 
-        private function clearDownloadsDirectory():void
+        private function addEventListeners():void
         {
-            // todo
+            Signal.instance.addEventListener(PopupEvent.OPEN, function (event:PopupEvent):void
+            {
+                openPopup(event.popup);
+            });
+
+            Signal.instance.addEventListener(PopupEvent.CLOSE, function (event:PopupEvent):void
+            {
+                closePopup();
+            });
         }
 
         private function preload():void
         {
-            var url:String = Settings.distro + "meta.json?" + UIDUtil.createUID();
+            var url:String = Settings.distro + "meta.json";
             var urlStream:URLStream = new URLStream();
             var fileStream:FileStream = new FileStream();
             var file:File = File.applicationStorageDirectory.resolvePath("meta.json");
@@ -61,7 +81,7 @@
 
             var meta:Object = metaJson ? JSON.parse(metaJson) : null;
 
-            urlStream.load(new URLRequest(url));
+            urlStream.load(new URLRequest(url + "?" + UIDUtil.createUID()));
 
             labelPreloaderSource.text = url;
             labelPreloaderTarget.text = file.url;
@@ -86,8 +106,6 @@
 
                 EngineManager.instance.populate(meta.versions);
 
-                clearDownloadsDirectory();
-
                 finishPreload();
             });
 
@@ -96,6 +114,11 @@
                 // Error downloading Metadata
                 finishPreload();
             });
+        }
+
+        private function clearDownloadsDirectory():void
+        {
+            // todo
         }
 
         private function finishPreload():void
@@ -118,7 +141,7 @@
             setTimeout(function ():void
             {
                 preloader.visible = false;
-                buttonBarNavigation.selectedIndex = 2;
+                buttonBarNavigation.selectedIndex = 1;
                 onChangeNavigation(null);
             }, 100);
         }
@@ -146,6 +169,32 @@
                 showEngineBadge = false;
 
             validatePageNavigation();
+        }
+
+        private function openPopup(panel:Popup):void
+        {
+            // Close existing popups
+            while (groupPopups.numElements > 0)
+                Popup(groupPopups.getElementAt(0)).close();
+
+            groupPopups.addElement(panel);
+        }
+
+        private function closePopup():void
+        {
+            // Close all existing popups
+            // Expect only one popup at a time since popups are designed to be modal only
+            popupModalRectangle.visible = false;
+            while (groupPopups.numElements > 0)
+                Popup(groupPopups.getElementAt(0)).close();
+        }
+
+        private function onPopupAddedOrRemoved(event:ElementExistenceEvent):void
+        {
+            callLater(function ():void
+            {
+                popupModalRectangle.includeInLayout = popupModalRectangle.visible = groupPopups.numElements > 0;
+            });
         }
         ]]></fx:Script>
 
@@ -265,5 +314,30 @@
         </s:VGroup>
 
     </s:Group>
+
+    <!--Modal mode rectangle for popups-->
+    <s:VGroup id="popupModalRectangle"
+              width="100%"
+              height="100%"
+              visible="false"
+              includeInLayout="false">
+        <s:Rect width="100%"
+                height="100%">
+            <s:fill>
+                <s:SolidColor color="{Color.black}"
+                              alpha=".4"/>
+            </s:fill>
+        </s:Rect>
+    </s:VGroup>
+
+    <!--Popup layer-->
+    <s:VGroup id="groupPopups"
+              elementAdd="onPopupAddedOrRemoved(event)"
+              elementRemove="onPopupAddedOrRemoved(event)"
+              width="100%"
+              height="100%"
+              padding="50"
+              horizontalAlign="center"
+              verticalAlign="middle"/>
 
 </s:WindowedApplication>

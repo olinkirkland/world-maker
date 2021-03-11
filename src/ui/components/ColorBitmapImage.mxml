@@ -4,7 +4,6 @@
                smoothingQuality="high"
                smooth="true">
     <fx:Script><![CDATA[
-        [Bindable]
         public function set color(value:uint):void
         {
             var t:ColorTransform = transform.colorTransform;
@@ -12,7 +11,6 @@
             transform.colorTransform = t;
         }
 
-        [Bindable]
         public function get color():uint
         {
             return transform.colorTransform.color;

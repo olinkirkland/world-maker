@@ -1,19 +1,22 @@
 <?xml version="1.0"?>
-<s:GridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
-                    xmlns:s="library://ns.adobe.com/flex/spark"
-                    xmlns:ui="ui.*"
-                    creationComplete="onCreationComplete(event)"
-                    width="100%"
-                    minWidth="300">
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+                xmlns:s="library://ns.adobe.com/flex/spark"
+                xmlns:ui="ui.*"
+                creationComplete="onCreationComplete(event)"
+                width="100%"
+                minWidth="300"
+                autoDrawBackground="false">
     <fx:Script><![CDATA[
         import data.EngineData;
-        import data.EngineManager;
+        import data.PopupManager;
 
         import global.Color;
         import global.Icons;
         import global.Util;
 
         import mx.events.FlexEvent;
+
+        import ui.popups.PopupConfirm;
 
         private var engineData:EngineData;
 
@@ -101,7 +104,12 @@
 
         private function onClickDelete(event:MouseEvent):void
         {
-            engineData.uninstall();
+            var p:PopupConfirm = new PopupConfirm();
+            p.callbackConfirm = engineData.uninstall;
+            p.header = "Remove Version";
+            p.description = "Are you sure you want to remove Version " + engineData.version + "?";
+            p.textConfirm = "Remove";
+            PopupManager.open(p);
         }
 
         private function onClickLaunch(event:MouseEvent):void
@@ -181,4 +189,4 @@
 
     </s:Group>
 
-</s:GridItemRenderer>
+</s:ItemRenderer>

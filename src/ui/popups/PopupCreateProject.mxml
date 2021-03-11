@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+<popups:Popup xmlns:fx="http://ns.adobe.com/mxml/2009"
+              xmlns:s="library://ns.adobe.com/flex/spark"
+              xmlns:popups="ui.popups.*"
+              width="320">
+
+    <fx:Script><![CDATA[
+        import data.EngineData;
+        import data.EngineManager;
+
+        import mx.collections.ArrayCollection;
+        import mx.events.FlexEvent;
+
+        import spark.collections.Sort;
+        import spark.collections.SortField;
+
+        public var callbackConfirm:Function = null;
+        private var engines:ArrayCollection;
+        private var sortByDate:Sort;
+
+        override public function onCreationComplete(event:FlexEvent):void
+        {
+            super.onCreationComplete(event);
+
+            sortByDate = new Sort();
+            sortByDate.fields = [new SortField("date", true)];
+
+            engines = new ArrayCollection(EngineManager.instance.engines);
+            engines.sort = sortByDate;
+            listEngines.dataProvider = engines;
+
+            focusManager.setFocus(inputTitle);
+        }
+
+        private function cancelAndClose(event:MouseEvent):void
+        {
+            close();
+        }
+
+        private function confirmAndClose(event:MouseEvent):void
+        {
+            if (callbackConfirm != null) callbackConfirm.apply();
+            close();
+        }
+
+        private function onChangeEnginesFilter(event:Event):void
+        {
+            engines.filterFunction = checkBoxFilterByInstall.selected ? filterByInstall : null;
+            engines.sort = sortByDate;
+            engines.refresh();
+        }
+
+        private function filterByInstall(engineData:EngineData):Boolean
+        {
+            return engineData.installDirectory.exists;
+        }
+        ]]>
+    </fx:Script>
+
+    <s:VGroup gap="15"
+              width="100%">
+
+        <s:Label text="Create a new Project"
+                 width="100%"
+                 styleName="header"/>
+
+        <s:Panel skinClass="ui.skins.PanelSkinOutline"
+                 width="100%">
+            <s:VGroup width="100%"
+                      height="100%"
+                      gap="5">
+
+                <s:Label text="Enter a Title for this Project"
+                         width="100%"/>
+                <s:TextInput id="inputTitle"
+                             width="100%"
+                             text="Untitled"/>
+
+            </s:VGroup>
+
+        </s:Panel>
+
+        <s:Panel skinClass="ui.skins.PanelSkinOutline"
+                 width="100%">
+            <s:VGroup width="100%"
+                      height="100%"
+                      gap="5">
+
+                <s:Label text="Choose an Engine"
+                         width="100%"/>
+
+                <s:CheckBox id="checkBoxFilterByInstall"
+                            label="Show only installed Engines"
+                            change="onChangeEnginesFilter(event)"/>
+
+                <s:List id="listEngines"
+                        useVirtualLayout="false"
+                        width="100%"
+                        height="100%"
+                        maxHeight="120"
+                        contentBackgroundAlpha="0"
+                        borderVisible="false"
+                        horizontalScrollPolicy="off"
+                        requireSelection="true"
+                        allowMultipleSelection="false"
+                        itemRenderer="ui.itemRenderers.ItemRendererEngineMini">
+                    <s:layout>
+                        <s:TileLayout columnAlign="justifyUsingWidth"
+                                      requestedColumnCount="3"
+                                      horizontalGap="5"
+                                      verticalGap="5"/>
+                    </s:layout>
+                </s:List>
+
+            </s:VGroup>
+        </s:Panel>
+
+        <s:Spacer height="5"/>
+
+        <s:HGroup width="100%"
+                  horizontalAlign="right">
+            <s:Button id="buttonCancel"
+                      label="Cancel"
+                      click="cancelAndClose(event)"/>
+            <s:Button id="buttonConfirm"
+                      label="Create Project"
+                      skinClass="ui.skins.ButtonSkinTheme"
+                      click="confirmAndClose(event)"/>
+        </s:HGroup>
+
+    </s:VGroup>
+</popups:Popup>

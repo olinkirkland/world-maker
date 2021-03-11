@@ -2,5 +2,78 @@
 <pages:Page xmlns:fx="http://ns.adobe.com/mxml/2009"
             xmlns:s="library://ns.adobe.com/flex/spark"
             xmlns:pages="ui.pages.*">
-    <s:Label text="Projects"/>
+
+    <fx:Script><![CDATA[
+        import data.PopupManager;
+
+        import ui.popups.PopupCreateProject;
+
+        private function onCreateProject(event:MouseEvent):void
+        {
+            var p:PopupCreateProject = new PopupCreateProject();
+            PopupManager.open(p);
+        }
+        ]]></fx:Script>
+
+    <s:VGroup width="100%"
+              height="100%"
+              gap="15">
+        <s:Label styleName="pageTitle"
+                 text="Projects"/>
+        <s:HGroup width="100%"
+                  height="100%"
+                  gap="15">
+            <s:VGroup width="200"
+                      height="100%"
+                      gap="15">
+                <s:Panel skinClass="ui.skins.PanelSkinOutline"
+                         width="100%">
+                    <s:VGroup width="100%">
+                        <s:Label width="100%"
+                                 text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Purus faucibus ornare suspendisse sed nisi lacus sed viverra. Ultrices in iaculis nunc sed augue."/>
+                    </s:VGroup>
+                </s:Panel>
+                <s:Panel width="100%"
+                         height="100%"
+                         skinClass="ui.skins.PanelSkinPageSection">
+                    <s:VGroup width="100%"
+                              height="100%"
+                              padding="10"
+                              gap="5">
+                        <s:Label text="Start a new Project"/>
+                        <s:Spacer height="5"/>
+                        <s:Button label="Create Project"
+                                  click="onCreateProject(event)"/>
+                        <s:Button label="Import Project"/>
+                    </s:VGroup>
+                </s:Panel>
+            </s:VGroup>
+
+            <s:Panel width="100%"
+                     height="100%"
+                     skinClass="ui.skins.PanelSkinPageSection">
+                <s:VGroup width="100%"
+                          height="100%"
+                          padding="10"
+                          gap="10">
+                    <s:Label text="My Projects"/>
+                    <s:List id="listAvailableEngines"
+                            useVirtualLayout="false"
+                            width="100%"
+                            height="100%"
+                            contentBackgroundAlpha="0"
+                            borderVisible="false"
+                            horizontalScrollPolicy="off"
+                            itemRenderer="ui.itemRenderers.ItemRendererEngine">
+                        <s:layout>
+                            <s:TileLayout columnAlign="justifyUsingWidth"
+                                          horizontalGap="10"
+                                          verticalGap="10"/>
+                        </s:layout>
+                    </s:List>
+                </s:VGroup>
+
+            </s:Panel>
+        </s:HGroup>
+    </s:VGroup>
 </pages:Page>

@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<popups:Popup xmlns:fx="http://ns.adobe.com/mxml/2009"
+              xmlns:s="library://ns.adobe.com/flex/spark"
+              xmlns:popups="ui.popups.*"
+              width="240">
+
+    <fx:Script><![CDATA[
+        import mx.events.FlexEvent;
+
+        public var callbackConfirm:Function = null;
+        public var header:String = "Confirm decision";
+        public var description:String = "Input text.";
+        public var textConfirm:String = "Confirm";
+        public var textCancel:String = "Cancel";
+        public var textPrompt:String = "Text";
+
+        override public function onCreationComplete(event:FlexEvent):void
+        {
+            super.onCreationComplete(event);
+        }
+
+        private function cancelAndClose(event:MouseEvent):void
+        {
+            close();
+        }
+
+        private function confirmAndClose(event:MouseEvent):void
+        {
+            if (callbackConfirm != null) callbackConfirm.apply(this, [input.text]);
+            close();
+        }
+        ]]>
+    </fx:Script>
+
+    <s:VGroup gap="10"
+              width="100%">
+
+        <s:HGroup width="100%"
+                  verticalAlign="middle">
+            <s:Label id="labelHeader"
+                     text="{header}"
+                     width="100%"
+                     styleName="header"/>
+        </s:HGroup>
+
+        <s:Panel width="100%">
+            <s:VGroup width="100%">
+                <s:Label id="labelDescription"
+                         text="{description}"
+                         width="100%"/>
+                <s:TextInput id="input"
+                             prompt="{textPrompt}"
+                             width="100%"
+                             left="10"
+                             right="10"/>
+            </s:VGroup>
+        </s:Panel>
+
+        <s:HGroup width="100%"
+                  horizontalAlign="right">
+            <s:Button id="buttonCancel"
+                      label="{textCancel}"
+                      click="cancelAndClose(event)"/>
+            <s:Button id="buttonConfirm"
+                      label="{textConfirm}"
+                      click="confirmAndClose(event)"/>
+        </s:HGroup>
+
+    </s:VGroup>
+</popups:Popup>

@@ -20,8 +20,8 @@ package global
         [Embed(source="/assets/icons/plant.png")]
         public static const Plant:Class;
 
-        [Embed(source="/assets/icons/projects.png")]
-        public static const Projects:Class;
+        [Embed(source="/assets/icons/add.png")]
+        public static const Add:Class;
 
         [Embed(source="/assets/icons/pen.png")]
         public static const Pen:Class;
@@ -29,8 +29,11 @@ package global
         [Embed(source="/assets/icons/delete.png")]
         public static const Delete:Class;
 
-        [Embed(source="/assets/icons/start.png")]
-        public static const Start:Class;
+        [Embed(source="/assets/icons/hourglass.png")]
+        public static const Hourglass:Class;
+
+        [Embed(source="/assets/icons/error.png")]
+        public static const Error:Class;
 
         [Embed(source="/assets/icons/cloud.png")]
         public static const Cloud:Class;
@@ -43,5 +46,11 @@ package global
 
         [Embed(source="/assets/icons/test.png")]
         public static const Test:Class;
+
+        [Embed(source="/assets/icons/checkBoxOff.png")]
+        public static const CheckBoxOff:Class;
+
+        [Embed(source="/assets/icons/checkBoxOn.png")]
+        public static const CheckBoxOn:Class;
     }
 }

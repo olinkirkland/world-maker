@@ -9,11 +9,6 @@
         import data.EngineManager;
 
         import mx.collections.ArrayCollection;
-
-        import mx.collections.ArrayCollection;
-
-        import mx.collections.ArrayCollection;
-        import mx.events.CollectionEvent;
         import mx.events.FlexEvent;
 
         import spark.collections.Sort;
@@ -89,7 +84,7 @@
                                 height="100%"
                                 contentBackgroundAlpha="0"
                                 borderVisible="false"
-                                itemRenderer="ui.itemRenderers.GridItemRendererEngine">
+                                itemRenderer="ui.itemRenderers.ItemRendererEngine">
                             <s:layout>
                                 <s:VerticalLayout gap="10"/>
                             </s:layout>
@@ -113,7 +108,7 @@
                             contentBackgroundAlpha="0"
                             borderVisible="false"
                             horizontalScrollPolicy="off"
-                            itemRenderer="ui.itemRenderers.GridItemRendererEngine">
+                            itemRenderer="ui.itemRenderers.ItemRendererEngine">
                         <s:layout>
                             <s:TileLayout columnAlign="justifyUsingWidth"
                                           horizontalGap="10"

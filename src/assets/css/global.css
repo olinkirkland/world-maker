@@ -60,6 +60,11 @@ s|RichEditableText {
     fontSize: 12;
 }
 
+s|TextInput {
+    skinClass: ClassReference("ui.skins.TextInputSkin");
+    focusAlpha: 0;
+}
+
 /*
 Scrollbars
  */
@@ -86,4 +91,8 @@ s|ButtonBar {
 
 s|Button {
     skinClass: ClassReference("ui.skins.ButtonSkin");
+}
+
+s|CheckBox {
+    skinClass: ClassReference("ui.skins.CheckBoxSkin");
 }
