@@ -13,7 +13,6 @@
 
     <fx:Script><![CDATA[
         import data.EngineManager;
-        import data.PopupManager;
         import data.Signal;
 
         import events.PopupEvent;
@@ -24,19 +23,19 @@
 
         import mx.collections.ArrayCollection;
         import mx.events.FlexEvent;
+        import mx.managers.ToolTipManager;
         import mx.utils.UIDUtil;
 
         import spark.events.ElementExistenceEvent;
-
         import spark.events.IndexChangeEvent;
 
+        import ui.ToolTip;
         import ui.pages.Page;
         import ui.pages.PageEngine;
         import ui.pages.PageHome;
         import ui.pages.PageProjects;
         import ui.pages.PageSettings;
         import ui.popups.Popup;
-        import ui.popups.PopupLoading;
 
         private var pages:Object;
         private var currentPage:Page;
@@ -46,6 +45,9 @@
         private function onCreationComplete(event:FlexEvent):void
         {
             addEventListeners();
+
+            ToolTipManager.showDelay = 0;
+            ToolTipManager.toolTipClass = ToolTip;
 
             clearDownloadsDirectory();
             preload();
@@ -86,7 +88,7 @@
             labelPreloaderSource.text = url;
             labelPreloaderTarget.text = file.url;
 
-            urlStream.addEventListener(Event.COMPLETE, function (event:Event)
+            urlStream.addEventListener(Event.COMPLETE, function (event:Event):void
             {
                 // Metadata downloaded
                 var newMetaJson:String = urlStream.readUTFBytes(urlStream.bytesAvailable);
@@ -104,7 +106,7 @@
                 fileStream.writeUTFBytes(newMetaJson);
                 fileStream.close();
 
-                EngineManager.instance.populate(meta.versions);
+                EngineManager.instance.load(meta.versions);
 
                 finishPreload();
             });

@@ -24,7 +24,7 @@ package data
             dispatchEvent(new Event(ENGINES_CHANGED));
         }
 
-        public function populate(arr:Array):void
+        public function load(arr:Array):void
         {
             var folder:File = File.applicationStorageDirectory.resolvePath("versions");
             if (!folder.exists)
@@ -48,6 +48,15 @@ package data
             if (!_instance)
                 new EngineManager();
             return _instance;
+        }
+
+        public function getEngineByVersion(engine:String):EngineData
+        {
+            for each (var engineData:EngineData in engines)
+                if (engine == engineData.version)
+                    return engineData;
+
+            return null;
         }
     }
 }

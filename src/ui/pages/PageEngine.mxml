@@ -22,14 +22,18 @@
             var sortByDate:Sort = new Sort();
             sortByDate.fields = [new SortField("date", true)];
 
+            // Available Engines
             availableEngines = new ArrayCollection(EngineManager.instance.engines);
             availableEngines.sort = sortByDate;
+            availableEngines.refresh();
             listAvailableEngines.dataProvider = availableEngines;
 
+            // Installed Engines
             installedEngines = new ArrayCollection(EngineManager.instance.engines);
-            listInstalledEngines.dataProvider = installedEngines;
+            installedEngines.sort = sortByDate;
             installedEngines.filterFunction = filterByInstall;
             installedEngines.refresh();
+            listInstalledEngines.dataProvider = installedEngines;
 
             EngineManager.instance.addEventListener(EngineManager.ENGINES_CHANGED, onEnginesChanged);
         }

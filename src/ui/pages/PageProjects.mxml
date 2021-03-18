@@ -1,17 +1,57 @@
 <?xml version="1.0"?>
 <pages:Page xmlns:fx="http://ns.adobe.com/mxml/2009"
             xmlns:s="library://ns.adobe.com/flex/spark"
-            xmlns:pages="ui.pages.*">
+            xmlns:pages="ui.pages.*"
+            creationComplete="onCreationComplete(event)">
 
     <fx:Script><![CDATA[
+        import data.EngineData;
         import data.PopupManager;
+        import data.ProjectData;
+        import data.ProjectManager;
+
+        import mx.events.CollectionEvent;
+        import mx.events.FlexEvent;
 
         import ui.popups.PopupCreateProject;
+
+        private function onCreationComplete(event:FlexEvent):void
+        {
+            listProjects.dataProvider = ProjectManager.instance.projects;
+            ProjectManager.instance.projects.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChangeListProjects);
+            validateGroupNoProjects();
+        }
 
         private function onCreateProject(event:MouseEvent):void
         {
             var p:PopupCreateProject = new PopupCreateProject();
+            p.callbackConfirm = createProject;
             PopupManager.open(p);
+        }
+
+        private function createProject(p:PopupCreateProject):void
+        {
+            var selectedName:String = p.selectedName;
+            var selectedEngine:EngineData = p.selectedEngine;
+
+            var projectData:ProjectData = new ProjectData();
+            projectData.file = File.applicationStorageDirectory.resolvePath("projects").resolvePath(selectedName + ".json");
+            projectData.name = selectedName;
+            projectData.date = new Date().time;
+            projectData.engine = selectedEngine.version;
+
+            ProjectManager.instance.addProject(projectData);
+        }
+
+        private function onChangeListProjects(event:Event):void
+        {
+            validateGroupNoProjects();
+        }
+
+        private function validateGroupNoProjects():void
+        {
+            trace("# projects: " + ProjectManager.instance.projects.length);
+            groupNoProjects.visible = ProjectManager.instance.projects.length == 0;
         }
         ]]></fx:Script>
 
@@ -39,7 +79,8 @@
                     <s:VGroup width="100%"
                               height="100%"
                               padding="10"
-                              gap="5">
+                              gap="5"
+                              horizontalAlign="center">
                         <s:Label text="Start a new Project"/>
                         <s:Spacer height="5"/>
                         <s:Button label="Create Project"
@@ -57,23 +98,43 @@
                           padding="10"
                           gap="10">
                     <s:Label text="My Projects"/>
-                    <s:List id="listAvailableEngines"
-                            useVirtualLayout="false"
-                            width="100%"
-                            height="100%"
-                            contentBackgroundAlpha="0"
-                            borderVisible="false"
-                            horizontalScrollPolicy="off"
-                            itemRenderer="ui.itemRenderers.ItemRendererEngine">
-                        <s:layout>
-                            <s:TileLayout columnAlign="justifyUsingWidth"
-                                          horizontalGap="10"
-                                          verticalGap="10"/>
-                        </s:layout>
-                    </s:List>
+                    <s:Group width="100%"
+                             height="100%">
+                        <s:List id="listProjects"
+                                useVirtualLayout="false"
+                                width="100%"
+                                height="100%"
+                                contentBackgroundAlpha="0"
+                                borderVisible="false"
+                                horizontalScrollPolicy="off"
+                                itemRenderer="ui.itemRenderers.ItemRendererProject">
+                            <s:layout>
+                                <s:TileLayout columnAlign="justifyUsingWidth"
+                                              horizontalGap="10"
+                                              verticalGap="10"/>
+                            </s:layout>
+                        </s:List>
+                        <s:VGroup id="groupNoProjects"
+                                  width="100%"
+                                  height="100%"
+                                  horizontalAlign="center"
+                                  verticalAlign="middle">
+                            <s:Panel>
+                                <s:VGroup horizontalAlign="center"
+                                          gap="15"
+                                          padding="15">
+                                    <s:Label text="You don't have any Projects."/>
+                                    <s:Button label="Create Project"
+                                              skinClass="ui.skins.ButtonSkinTheme"
+                                              click="onCreateProject(event)"/>
+                                </s:VGroup>
+                            </s:Panel>
+                        </s:VGroup>
+                    </s:Group>
                 </s:VGroup>
 
             </s:Panel>
         </s:HGroup>
     </s:VGroup>
+
 </pages:Page>

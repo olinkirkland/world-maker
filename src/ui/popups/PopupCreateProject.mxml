@@ -2,17 +2,24 @@
 <popups:Popup xmlns:fx="http://ns.adobe.com/mxml/2009"
               xmlns:s="library://ns.adobe.com/flex/spark"
               xmlns:popups="ui.popups.*"
+              xmlns:ui="ui.components.*"
               width="320">
 
     <fx:Script><![CDATA[
         import data.EngineData;
         import data.EngineManager;
+        import data.ProjectData;
+        import data.ProjectManager;
+
+        import global.Color;
+        import global.Icons;
 
         import mx.collections.ArrayCollection;
         import mx.events.FlexEvent;
 
         import spark.collections.Sort;
         import spark.collections.SortField;
+        import spark.events.TextOperationEvent;
 
         public var callbackConfirm:Function = null;
         private var engines:ArrayCollection;
@@ -27,9 +34,46 @@
 
             engines = new ArrayCollection(EngineManager.instance.engines);
             engines.sort = sortByDate;
+            engines.refresh();
+
             listEngines.dataProvider = engines;
 
-            focusManager.setFocus(inputTitle);
+            inputName.text = getNextName();
+            validateName();
+
+            callLater(function ():void
+            {
+                focusManager.setFocus(inputName);
+            });
+        }
+
+        private function getNextName():String
+        {
+            var baseName:String = "Untitled";
+            var currentName:String = baseName;
+            var i:int = 1;
+            while (nameExists(currentName))
+                currentName = baseName + " " + i++;
+
+            function nameExists(str:String):Boolean
+            {
+                for each (var p:ProjectData in ProjectManager.instance.projects)
+                    if (p.name == str)
+                        return true;
+                return false;
+            }
+
+            return currentName;
+        }
+
+        public function get selectedEngine():EngineData
+        {
+            return listEngines.selectedItem;
+        }
+
+        public function get selectedName():String
+        {
+            return inputName.text;
         }
 
         private function cancelAndClose(event:MouseEvent):void
@@ -39,7 +83,7 @@
 
         private function confirmAndClose(event:MouseEvent):void
         {
-            if (callbackConfirm != null) callbackConfirm.apply();
+            if (callbackConfirm != null) callbackConfirm.apply(this, [this]);
             close();
         }
 
@@ -53,6 +97,18 @@
         private function filterByInstall(engineData:EngineData):Boolean
         {
             return engineData.installDirectory.exists;
+        }
+
+        private function validateName():void
+        {
+            var valid:Boolean = ProjectManager.instance.validateNewName(inputName.text);
+            groupImageNameValidation.includeInLayout = groupImageNameValidation.visible = !valid;
+            buttonConfirm.enabled = valid;
+        }
+
+        private function onChangeInputName(event:TextOperationEvent):void
+        {
+            validateName();
         }
         ]]>
     </fx:Script>
@@ -72,9 +128,21 @@
 
                 <s:Label text="Enter a Title for this Project"
                          width="100%"/>
-                <s:TextInput id="inputTitle"
-                             width="100%"
-                             text="Untitled"/>
+                <s:HGroup width="100%"
+                          gap="10"
+                          verticalAlign="middle">
+                    <s:TextInput id="inputName"
+                                 width="100%"
+                                 change="onChangeInputName(event)"/>
+                    <s:Group id="groupImageNameValidation"
+                             toolTip="Project names must be unique">
+                        <ui:ColorBitmapImage id="imageNameValidation"
+                                             width="16"
+                                             height="16"
+                                             source="{Icons.Error}"
+                                             color="{Color.textHigh}"/>
+                    </s:Group>
+                </s:HGroup>
 
             </s:VGroup>
 
@@ -84,7 +152,7 @@
                  width="100%">
             <s:VGroup width="100%"
                       height="100%"
-                      gap="5">
+                      gap="10">
 
                 <s:Label text="Choose an Engine"
                          width="100%"/>
@@ -112,13 +180,15 @@
                     </s:layout>
                 </s:List>
 
+                <s:Label width="100%"
+                         text="Projects must specify an Engine to use. You can create a Project with an Engine you have not installed, but you will be required to install that engine to open the Project."/>
+
             </s:VGroup>
         </s:Panel>
 
-        <s:Spacer height="5"/>
-
         <s:HGroup width="100%"
-                  horizontalAlign="right">
+                  horizontalAlign="right"
+                  top="5">
             <s:Button id="buttonCancel"
                       label="Cancel"
                       click="cancelAndClose(event)"/>

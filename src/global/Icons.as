@@ -20,6 +20,9 @@ package global
         [Embed(source="/assets/icons/plant.png")]
         public static const Plant:Class;
 
+        [Embed(source="/assets/icons/box.png")]
+        public static const Box:Class;
+
         [Embed(source="/assets/icons/add.png")]
         public static const Add:Class;
 
@@ -29,8 +32,11 @@ package global
         [Embed(source="/assets/icons/delete.png")]
         public static const Delete:Class;
 
-        [Embed(source="/assets/icons/hourglass.png")]
-        public static const Hourglass:Class;
+        [Embed(source="/assets/icons/notInstalled.png")]
+        public static const NotInstalled:Class;
+
+        [Embed(source="/assets/icons/downloadInProgress.png")]
+        public static const DownloadInProgress:Class;
 
         [Embed(source="/assets/icons/error.png")]
         public static const Error:Class;
@@ -52,5 +58,8 @@ package global
 
         [Embed(source="/assets/icons/checkBoxOn.png")]
         public static const CheckBoxOn:Class;
+
+        [Embed(source="/assets/icons/checkmark.png")]
+        public static const Checkmark:Class;
     }
 }

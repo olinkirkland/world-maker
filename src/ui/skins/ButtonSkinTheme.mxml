@@ -42,7 +42,7 @@
             <s:fill>
                 <s:SolidColor color="{Color.themePrimary}"
                               alpha.normal="1"
-                              alpha.disabled="0"/>
+                              alpha.disabled=".5"/>
             </s:fill>
         </s:Rect>
 

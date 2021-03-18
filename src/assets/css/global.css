@@ -30,6 +30,7 @@ Labels
  */
 
 s|Label {
+    lineHeight: 16;
     paddingBottom: -2;
     font-family: Body;
     color: #6d7173;

@@ -76,7 +76,7 @@ package data
                 }, 1000);
             });
 
-            urlStream.addEventListener(IOErrorEvent.IO_ERROR, function (event:IOErrorEvent)
+            urlStream.addEventListener(IOErrorEvent.IO_ERROR, function (event:IOErrorEvent):void
             {
                 downloadingOrUnzipping = false;
                 trace("Error! Not a valid address");
@@ -103,7 +103,7 @@ package data
             stream.close();
             zip.loadBytes(bytes);
 
-            function onUnzipComplete(e:Event)
+            function onUnzipComplete(e:Event):void
             {
                 trace("Unzip complete");
                 var fileStream:FileStream = new FileStream();
