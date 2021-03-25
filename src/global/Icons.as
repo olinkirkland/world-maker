@@ -2,9 +2,6 @@ package global
 {
     public class Icons
     {
-        /**
-         * App
-         */
         [Embed(source="/assets/icons/castle.png")]
         public static const Castle:Class;
 
@@ -16,6 +13,9 @@ package global
 
         [Embed(source="/assets/icons/settings.png")]
         public static const Settings:Class;
+
+        [Embed(source="/assets/icons/down.png")]
+        public static const Down:Class;
 
         [Embed(source="/assets/icons/plant.png")]
         public static const Plant:Class;
@@ -31,6 +31,9 @@ package global
 
         [Embed(source="/assets/icons/delete.png")]
         public static const Delete:Class;
+
+        [Embed(source="/assets/icons/installed.png")]
+        public static const Installed:Class;
 
         [Embed(source="/assets/icons/notInstalled.png")]
         public static const NotInstalled:Class;
@@ -61,5 +64,20 @@ package global
 
         [Embed(source="/assets/icons/checkmark.png")]
         public static const Checkmark:Class;
+
+        [Embed(source="/assets/icons/refresh.png")]
+        public static const Refresh:Class;
+
+        [Embed(source="/assets/icons/edit.png")]
+        public static const Edit:Class;
+
+        [Embed(source="/assets/icons/search.png")]
+        public static const Search:Class;
+
+        [Embed(source="/assets/icons/multiply.png")]
+        public static const Multiply:Class;
+
+        [Embed(source="/assets/icons/sort.png")]
+        public static const Sort:Class;
     }
 }

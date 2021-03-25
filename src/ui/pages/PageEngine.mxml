@@ -8,6 +8,8 @@
         import data.EngineData;
         import data.EngineManager;
 
+        import global.Icons;
+
         import mx.collections.ArrayCollection;
         import mx.events.FlexEvent;
 
@@ -36,6 +38,14 @@
             listInstalledEngines.dataProvider = installedEngines;
 
             EngineManager.instance.addEventListener(EngineManager.ENGINES_CHANGED, onEnginesChanged);
+
+            validateInstalledEngines();
+        }
+
+        private function validateInstalledEngines():void
+        {
+            groupInstalledEngines.visible = groupInstalledEngines.includeInLayout = installedEngines.length > 0;
+            groupNoInstalledEngines.visible = groupNoInstalledEngines.includeInLayout = !groupInstalledEngines.visible;
         }
 
         override public function dispose():void
@@ -48,11 +58,22 @@
         private function onEnginesChanged(event:Event):void
         {
             installedEngines.refresh();
+
+            validateInstalledEngines();
         }
 
         private function filterByInstall(engineData:EngineData):Boolean
         {
             return engineData.installDirectory.exists;
+        }
+
+        private function onInstallAll(event:MouseEvent):void
+        {
+            for each (var engine:EngineData in availableEngines)
+            {
+                if (!engine.installDirectory.exists)
+                    engine.download();
+            }
         }
         ]]></fx:Script>
 
@@ -77,23 +98,43 @@
                 <s:Panel width="100%"
                          height="100%"
                          skinClass="ui.skins.PanelSkinPageSection">
-                    <s:VGroup width="100%"
-                              height="100%"
-                              padding="10"
-                              gap="10">
-                        <s:Label text="Installed"/>
-                        <s:List id="listInstalledEngines"
-                                useVirtualLayout="false"
-                                width="100%"
-                                height="100%"
-                                contentBackgroundAlpha="0"
-                                borderVisible="false"
-                                itemRenderer="ui.itemRenderers.ItemRendererEngine">
-                            <s:layout>
-                                <s:VerticalLayout gap="10"/>
-                            </s:layout>
-                        </s:List>
-                    </s:VGroup>
+                    <s:Group width="100%"
+                             height="100%">
+
+                        <s:VGroup id="groupNoInstalledEngines"
+                                  width="100%"
+                                  height="100%"
+                                  horizontalAlign="center"
+                                  verticalAlign="middle">
+                            <s:Panel>
+                                <s:VGroup horizontalAlign="center"
+                                          gap="15"
+                                          padding="15">
+                                    <s:Label text="You don't have any Engines installed."/>
+                                </s:VGroup>
+                            </s:Panel>
+                        </s:VGroup>
+
+                        <s:VGroup id="groupInstalledEngines"
+                                  width="100%"
+                                  height="100%"
+                                  padding="10"
+                                  gap="10">
+                            <s:Label text="Installed"/>
+                            <s:List id="listInstalledEngines"
+                                    useVirtualLayout="false"
+                                    width="100%"
+                                    height="100%"
+                                    contentBackgroundAlpha="0"
+                                    borderVisible="false"
+                                    itemRenderer="ui.itemRenderers.ItemRendererEngine">
+                                <s:layout>
+                                    <s:VerticalLayout gap="10"/>
+                                </s:layout>
+                            </s:List>
+                        </s:VGroup>
+
+                    </s:Group>
                 </s:Panel>
             </s:VGroup>
 
@@ -104,7 +145,18 @@
                           height="100%"
                           padding="10"
                           gap="10">
-                    <s:Label text="All Versions"/>
+                    <s:Panel skinClass="ui.skins.PanelSkinOutline"
+                             width="100%">
+                        <s:HGroup width="100%"
+                                  padding="0"
+                                  verticalAlign="middle">
+                            <s:Label text="All Versions"/>
+                            <s:Spacer width="100%"/>
+                            <s:Button icon="{Icons.Download}"
+                                      label="Install All"
+                                      click="onInstallAll(event)"/>
+                        </s:HGroup>
+                    </s:Panel>
                     <s:List id="listAvailableEngines"
                             useVirtualLayout="false"
                             width="100%"

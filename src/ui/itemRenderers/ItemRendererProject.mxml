@@ -3,8 +3,11 @@
                 xmlns:s="library://ns.adobe.com/flex/spark"
                 width="100%"
                 minWidth="300"
-                autoDrawBackground="false">
+                autoDrawBackground="false"
+                creationComplete="onCreationComplete(event)">
     <fx:Script><![CDATA[
+        import data.EngineData;
+        import data.EngineManager;
         import data.PopupManager;
         import data.ProjectData;
         import data.ProjectManager;
@@ -13,8 +16,11 @@
         import global.Icons;
         import global.Util;
 
+        import mx.events.FlexEvent;
+
         import ui.popups.PopupConfirm;
-        import ui.popups.PopupInput;
+        import ui.popups.PopupModifyProject;
+        import ui.popups.PopupOpenWith;
 
         private var projectData:ProjectData;
 
@@ -25,11 +31,19 @@
 
             projectData = ProjectData(value);
             labelName.text = projectData.name;
-            labelDate.text = Util.toRelativeDate(projectData.date);
-            labelEngine.text = "Engine Version " + projectData.engine;
+            labelEngine.text = "Engine " + projectData.engine;
+
+            updateRelativeDateLabels();
+            validateEngine();
         }
 
-        private function onClickDelete(event:MouseEvent):void
+        private function updateRelativeDateLabels():void
+        {
+            labelDateCreated.text = "Created " + Util.toRelativeDate(projectData.dateCreated);
+            labelDateModified.text = "Modified " + Util.toRelativeDate(projectData.dateModified);
+        }
+
+        private function deleteProject():void
         {
             var p:PopupConfirm = new PopupConfirm();
             p.callbackConfirm = projectData.remove;
@@ -44,17 +58,48 @@
             ProjectManager.instance.launch(projectData);
         }
 
-        private function onClickRename(event:MouseEvent):void
+        private function onClickOpenWith(event:MouseEvent):void
         {
-            var p:PopupInput = new PopupInput();
-            p.callbackConfirm = projectData.rename;
-            p.validateFunction = ProjectManager.instance.validateNewName;
-            p.initialInputText = projectData.name;
-            p.header = "Rename Project";
-            p.description = "Enter a new name for " + projectData.name + ".";
-            p.textConfirm = "Rename";
-            p.validateTooltip = "Project names must be unique";
+            var p:PopupOpenWith = new PopupOpenWith();
+            p.projectData = projectData;
             PopupManager.open(p);
+        }
+
+        private function onClickModify(event:MouseEvent):void
+        {
+            var p:PopupModifyProject = new PopupModifyProject();
+            p.projectData = projectData;
+            p.callbackConfirm = projectData.modify;
+            p.callbackDelete = deleteProject;
+            PopupManager.open(p);
+        }
+
+        private function onCreationComplete(event:FlexEvent):void
+        {
+            Util.timer.addEventListener(TimerEvent.TIMER, onTimer, false, 0, true);
+
+            var engineData:EngineData = EngineManager.instance.getEngineByVersion(projectData.engine);
+            engineData.addEventListener(EngineData.CONTENT_READY, onEngineAction, false, 0, true);
+            engineData.addEventListener(EngineData.UNINSTALL, onEngineAction, false, 0, true);
+        }
+
+        private function onEngineAction(event:Event):void
+        {
+            setTimeout(function ():void
+            {
+                validateEngine();
+            }, 500);
+        }
+
+        private function validateEngine():void
+        {
+            var engineData:EngineData = EngineManager.instance.getEngineByVersion(projectData.engine);
+            buttonOpen.enabled = engineData.installDirectory.exists;
+        }
+
+        private function onTimer(event:TimerEvent):void
+        {
+            updateRelativeDateLabels();
         }
         ]]>
     </fx:Script>
@@ -78,12 +123,19 @@
                       gap="10">
 
                 <s:Label id="labelName"
-                         width="100%"
+                         maxWidth="240"
+                         maxDisplayedLines="1"
+                         showTruncationTip="true"
                          styleName="header"/>
 
                 <s:HGroup width="100%">
-                    <s:Label id="labelDate"
-                             width="100%"/>
+                    <s:VGroup width="100%">
+                        <s:Label id="labelDateModified"
+                                 width="100%"/>
+                        <s:Label id="labelDateCreated"
+                                 color="{Color.textLow}"
+                                 width="100%"/>
+                    </s:VGroup>
 
                     <s:Label id="labelEngine"/>
                 </s:HGroup>
@@ -94,16 +146,16 @@
                       horizontalAlign="right"
                       top="5">
 
-                <s:Button id="buttonRename"
-                          label="Rename"
-                          click="onClickRename(event)"/>
+                <s:Button id="buttonModify"
+                          label="Modify"
+                          click="onClickModify(event)"/>
 
-                <s:Button id="buttonDelete"
-                          label="Delete"
-                          click="onClickDelete(event)"/>
+                <s:Button id="buttonOpenWith"
+                          label="Open with..."
+                          click="onClickOpenWith(event)"/>
 
                 <s:Button id="buttonOpen"
-                          skinClass="ui.skins.ButtonSkinTheme"
+                          skinClass="ui.skins.ButtonThemeSkin"
                           icon="{Icons.Pen}"
                           label="Open"
                           click="onClickOpen(event)"/>

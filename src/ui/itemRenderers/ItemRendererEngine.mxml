@@ -171,7 +171,7 @@
                       width="100%"
                       horizontalAlign="right">
                 <s:Button id="buttonDownload"
-                          skinClass="ui.skins.ButtonSkinTheme"
+                          skinClass="ui.skins.ButtonThemeSkin"
                           icon="{Icons.Download}"
                           label="Download"
                           click="onClickDownload(event)"/>

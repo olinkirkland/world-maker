@@ -28,9 +28,14 @@
                 // Force the location
                 visible = true;
                 var target:DisplayObject = ToolTipManager.currentTarget;
-                var coordinates:Point = target.localToGlobal(new Point(target.width / 2, target.height));
-                x = coordinates.x - width / 2;
-                y = coordinates.y + 5;
+                var targetWidth:int = target.localToGlobal(new Point(target.width, 0)).x;
+
+                callLater(function ():void
+                {
+                    var coordinates:Point = target.localToGlobal(new Point(target.width / 2, target.height));
+                    x = coordinates.x - width / 2;
+                    y = coordinates.y + 5;
+                });
             });
         }
 
@@ -57,7 +62,7 @@
         <s:HGroup padding="7">
             <s:Label id="label"
                      text="test"
-                     maxWidth="120"
+                     maxWidth="160"
                      textAlign="center"
                      color="{Color.textHigh}"/>
         </s:HGroup>

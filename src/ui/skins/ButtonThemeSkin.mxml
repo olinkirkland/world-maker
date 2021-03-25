@@ -37,8 +37,8 @@
         <s:Rect id="rect"
                 width="100%"
                 height="100%"
-                radiusX="{height/2}"
-                radiusY="{height/2}">
+                radiusX="5"
+                radiusY="5">
             <s:fill>
                 <s:SolidColor color="{Color.themePrimary}"
                               alpha.normal="1"
@@ -48,8 +48,8 @@
 
         <s:Rect width="100%"
                 height="100%"
-                radiusX="{height/2}"
-                radiusY="{height/2}">
+                radiusX="5"
+                radiusY="5">
             <s:fill>
                 <s:SolidColor color="{Color.white}"
                               alpha="0"

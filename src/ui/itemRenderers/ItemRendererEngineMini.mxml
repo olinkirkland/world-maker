@@ -54,7 +54,7 @@
             if (engineData.installDirectory.exists)
             {
                 // Downloaded
-                imageIcon.source = Icons.Box;
+                imageIcon.source = Icons.Installed;
                 imageGroup.toolTip = "Installed";
             } else
             {
@@ -82,8 +82,8 @@
                 radiusY="5">
             <s:fill>
                 <s:SolidColor color="{Color.fillMedium}"
-                              color.down="{Color.themePrimary}"
-                              color.selected="{Color.themePrimary}"/>
+                              color.down="{Color.fillInset}"
+                              color.selected="{Color.fillInset}"/>
             </s:fill>
         </s:Rect>
 

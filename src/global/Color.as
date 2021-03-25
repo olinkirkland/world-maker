@@ -12,7 +12,7 @@ package global
         public static const themeSecondary:uint = 0xfb433b;
 
         // Darkest to lightest fills
-        public static const fillInset:uint = 0x202427;
+        public static const fillInset:uint = 0x1c2024;
         public static const fillLow:uint = 0x212429;
         public static const fillMedium:uint = 0x272a2f;
         public static const fillHigh:uint = 0x2a2d32;

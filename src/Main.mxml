@@ -233,6 +233,7 @@
             <s:Spacer width="100%"/>
 
             <s:ButtonBar id="buttonBarNavigation"
+                         skinClass="ui.skins.ButtonBarSkinPageNavigation"
                          change="{onChangeNavigation(event)}"
                          requireSelection="true"
                          labelField="label"/>

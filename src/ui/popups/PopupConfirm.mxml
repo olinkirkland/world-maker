@@ -53,7 +53,7 @@
                       click="cancelAndClose(event)"/>
             <s:Button id="buttonConfirm"
                       label="{textConfirm}"
-                      skinClass="ui.skins.ButtonSkinTheme"
+                      skinClass="ui.skins.ButtonThemeSkin"
                       click="confirmAndClose(event)"/>
         </s:HGroup>
 

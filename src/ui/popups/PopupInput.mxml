@@ -98,12 +98,6 @@
                 <s:HGroup width="100%"
                           verticalAlign="middle"
                           gap="10">
-                    <s:TextInput id="input"
-                                 change="onInputChange(event)"
-                                 prompt="{textPrompt}"
-                                 width="100%"
-                                 left="10"
-                                 right="10"/>
                     <s:Group id="groupImageNameValidation">
                         <ui:ColorBitmapImage id="imageNameValidation"
                                              width="16"

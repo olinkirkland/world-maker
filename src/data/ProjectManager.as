@@ -6,6 +6,7 @@ package data
     import flash.filesystem.File;
     import flash.filesystem.FileMode;
     import flash.filesystem.FileStream;
+    import flash.geom.Rectangle;
     import flash.utils.ByteArray;
 
     import mx.collections.ArrayCollection;
@@ -34,8 +35,14 @@ package data
             dispatchEvent(new Event(PROJECTS_CHANGED));
         }
 
-        public function validateNewName(value:String):Boolean
+        public function validateNewName(value:String, exclude:String = null):Boolean
         {
+            if (exclude && value == exclude)
+                return true;
+
+            if (value.length == 0)
+                return false;
+
             var valid:Boolean = true;
             for each (var p:ProjectData in ProjectManager.instance.projects)
             {
@@ -59,14 +66,17 @@ package data
             {
                 var fileStream:FileStream = new FileStream();
                 fileStream.open(file, FileMode.READ);
-                var u:Object = JSON.parse(fileStream.readUTFBytes(fileStream.bytesAvailable));
+                var raw:String = fileStream.readUTFBytes(fileStream.bytesAvailable);
+                var u:Object = JSON.parse(raw);
                 fileStream.close();
 
                 var projectData:ProjectData = new ProjectData();
                 projectData.file = file;
                 projectData.name = u.meta.name;
-                projectData.date = u.meta.date;
+                projectData.dateCreated = u.meta.dateCreated;
+                projectData.dateModified = u.meta.dateModified;
                 projectData.engine = u.meta.engine;
+                projectData.content = u.content;
                 projects.addItem(projectData);
             }
         }
@@ -77,18 +87,14 @@ package data
 
             var window:ProjectWindow = new ProjectWindow();
             window.open(true);
-            var screen:Screen = Screen.mainScreen;
-
-            if (false)
-            {
-                // todo Apply Saved Size
-            }
-
-            window.x = screen.bounds.x;
-            window.y = screen.bounds.y;
-            window.width = screen.bounds.width;
-            window.height = screen.bounds.height;
-            window.maximize();
+            var bounds:Rectangle = Screen.mainScreen.bounds;
+            window.x = bounds.x;
+            window.y = bounds.y;
+//            window.width = bounds.width;
+//            window.height = bounds.height;
+//            window.maximize();
+            window.width = 200;
+            window.height = 200;
 
             // Load project swf
             var swfFile:File = EngineManager.instance.getEngineByVersion(projectData.engine).installDirectory.resolvePath("Main.swf");
@@ -100,26 +106,6 @@ package data
             fileStream.close();
 
             window.start(swfBytes, projectData);
-
-//            swfLoader.loaderContext = context;
-//            swfLoader.source = swfBytes;
-//            swfLoader.load();
-//
-//            splash.visible = false;
-//
-//            swfLoader.addEventListener(Event.COMPLETE, function (event:Event):void
-//            {
-//                try
-//                {
-//                    width = swfLoader.content["measuredWidth"];
-//                    height = swfLoader.content["measuredHeight"];
-//                } catch (error:Error)
-//                {
-//                    // No dimensions in loader
-//                }
-//
-//                center();
-//            });
         }
 
         public function saveAll():void

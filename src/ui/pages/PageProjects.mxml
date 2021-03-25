@@ -2,6 +2,7 @@
 <pages:Page xmlns:fx="http://ns.adobe.com/mxml/2009"
             xmlns:s="library://ns.adobe.com/flex/spark"
             xmlns:pages="ui.pages.*"
+            xmlns:ui="ui.components.*"
             creationComplete="onCreationComplete(event)">
 
     <fx:Script><![CDATA[
@@ -9,17 +10,35 @@
         import data.PopupManager;
         import data.ProjectData;
         import data.ProjectManager;
+        import data.ProjectSort;
 
+        import global.Color;
+        import global.Icons;
+
+        import mx.collections.ArrayCollection;
         import mx.events.CollectionEvent;
         import mx.events.FlexEvent;
+
+        import spark.collections.Sort;
+
+        import spark.events.IndexChangeEvent;
+
+        import spark.events.TextOperationEvent;
 
         import ui.popups.PopupCreateProject;
 
         private function onCreationComplete(event:FlexEvent):void
         {
             listProjects.dataProvider = ProjectManager.instance.projects;
+
+            dropDownListSort.dataProvider = new ArrayCollection([
+                {sort: ProjectSort.byName, text: "By Name"},
+                {sort: ProjectSort.byCreated, text: "By Recently Created"},
+                {sort: ProjectSort.byModified, text: "By Recently Changed"}]);
+
             ProjectManager.instance.projects.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChangeListProjects);
-            validateGroupNoProjects();
+            ProjectManager.instance.projects.filterFunction = filterBySearch;
+            validateProjects();
         }
 
         private function onCreateProject(event:MouseEvent):void
@@ -37,21 +56,46 @@
             var projectData:ProjectData = new ProjectData();
             projectData.file = File.applicationStorageDirectory.resolvePath("projects").resolvePath(selectedName + ".json");
             projectData.name = selectedName;
-            projectData.date = new Date().time;
+            projectData.dateCreated = new Date().time;
+            projectData.dateModified = projectData.dateCreated;
             projectData.engine = selectedEngine.version;
+            projectData.content = {};
 
             ProjectManager.instance.addProject(projectData);
+            validateSort();
         }
 
         private function onChangeListProjects(event:Event):void
         {
-            validateGroupNoProjects();
+            validateProjects();
         }
 
-        private function validateGroupNoProjects():void
+        private function validateProjects():void
         {
-            trace("# projects: " + ProjectManager.instance.projects.length);
-            groupNoProjects.visible = ProjectManager.instance.projects.length == 0;
+            labelMyProjects.text = "My Projects (" + ProjectManager.instance.projects.length + "/" + ProjectManager.instance.projects.source.length + ")";
+            groupNoMatch.visible = ProjectManager.instance.projects.length == 0;
+            groupNoProjects.visible = ProjectManager.instance.projects.source.length == 0;
+        }
+
+        private function onInputSearchChange(event:TextOperationEvent):void
+        {
+            ProjectManager.instance.projects.refresh();
+        }
+
+        private function filterBySearch(projectData:ProjectData):Boolean
+        {
+            return inputSearch.text.length == 0 || projectData.name.toLowerCase().indexOf(inputSearch.text.toLowerCase()) >= 0;
+        }
+
+        private function onDropDownListSortChanged(event:IndexChangeEvent):void
+        {
+            validateSort();
+        }
+
+        private function validateSort():void
+        {
+            ProjectManager.instance.projects.sort = dropDownListSort.selectedItem.sort;
+            ProjectManager.instance.projects.refresh();
         }
         ]]></fx:Script>
 
@@ -97,7 +141,27 @@
                           height="100%"
                           padding="10"
                           gap="10">
-                    <s:Label text="My Projects"/>
+
+                    <s:Panel skinClass="ui.skins.PanelSkinOutline"
+                             width="100%">
+                        <s:HGroup width="100%"
+                                  padding="0"
+                                  verticalAlign="middle">
+                            <s:Label id="labelMyProjects"/>
+                            <s:Spacer width="100%"/>
+                            <ui:ColorBitmapImage source="{Icons.Sort}"
+                                                 color="{Color.textMedium}"/>
+                            <s:DropDownList id="dropDownListSort"
+                                            labelField="text"
+                                            requireSelection="true"
+                                            change="onDropDownListSortChanged(event)"/>
+                            <ui:IconTextInput id="inputSearch"
+                                              icon="{Icons.Search}"
+                                              change="onInputSearchChange(event)"
+                                              width="240"/>
+                        </s:HGroup>
+                    </s:Panel>
+
                     <s:Group width="100%"
                              height="100%">
                         <s:List id="listProjects"
@@ -114,6 +178,7 @@
                                               verticalGap="10"/>
                             </s:layout>
                         </s:List>
+
                         <s:VGroup id="groupNoProjects"
                                   width="100%"
                                   height="100%"
@@ -125,16 +190,32 @@
                                           padding="15">
                                     <s:Label text="You don't have any Projects."/>
                                     <s:Button label="Create Project"
-                                              skinClass="ui.skins.ButtonSkinTheme"
+                                              skinClass="ui.skins.ButtonThemeSkin"
                                               click="onCreateProject(event)"/>
                                 </s:VGroup>
                             </s:Panel>
                         </s:VGroup>
+
+                        <s:VGroup id="groupNoMatch"
+                                  width="100%"
+                                  height="100%"
+                                  horizontalAlign="center"
+                                  verticalAlign="middle">
+                            <s:Panel>
+                                <s:VGroup horizontalAlign="center"
+                                          gap="15"
+                                          padding="15">
+                                    <s:Label text="No Projects match the search."/>
+                                </s:VGroup>
+                            </s:Panel>
+                        </s:VGroup>
+
                     </s:Group>
                 </s:VGroup>
 
             </s:Panel>
         </s:HGroup>
+
     </s:VGroup>
 
 </pages:Page>

@@ -4,12 +4,16 @@ package data
     import flash.filesystem.FileMode;
     import flash.filesystem.FileStream;
 
+    import ui.popups.PopupModifyProject;
+
     public class ProjectData
     {
         public var file:File;
         public var name:String;
-        public var date:Number;
+        public var dateCreated:Number;
+        public var dateModified:Number;
         public var engine:String;
+        public var content:Object;
 
         public function ProjectData()
         {
@@ -20,12 +24,14 @@ package data
             // Saves data to file
             var u:Object = {meta: {}};
             u.meta.name = name;
-            u.meta.date = date;
+            u.meta.dateCreated = dateCreated;
+            u.meta.dateModified = dateModified;
             u.meta.engine = engine;
+            u.content = content;
 
             var fileStream:FileStream = new FileStream();
             fileStream.openAsync(file, FileMode.WRITE);
-            fileStream.writeUTFBytes(JSON.stringify(u));
+            fileStream.writeUTFBytes(JSON.stringify(u, null, " "));
             fileStream.close();
         }
 
@@ -36,9 +42,12 @@ package data
             ProjectManager.instance.projects.refresh();
         }
 
-        public function rename(value:String):void
+        public function modify(popup:PopupModifyProject):void
         {
-            name = value;
+            name = popup.selectedName;
+            dateModified = new Date().time;
+            engine = popup.selectedEngine.version;
+
             var newFile:File = File.applicationStorageDirectory.resolvePath("projects").resolvePath(name + ".json");
             file.deleteFile();
             file = newFile;

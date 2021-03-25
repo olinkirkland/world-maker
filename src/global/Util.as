@@ -1,10 +1,25 @@
 package global
 {
+    import flash.utils.Timer;
+
     import mx.utils.StringUtil;
 
     public class Util
     {
         private static var months:Array = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+        private static var _timer:Timer;
+
+        public static function get timer():Timer
+        {
+            if (!_timer)
+            {
+                _timer = new Timer(1000);
+                _timer.start();
+            }
+
+            return _timer;
+        }
 
         public static function secondsSince(d:Date):Number
         {
@@ -46,8 +61,15 @@ package global
                 {
                     if (minutes < 60)
                     {
-                        // Minutes ago
-                        return minutes + " minutes ago";
+                        if (minutes < 5)
+                        {
+                            // Just now
+                            return "just now";
+                        } else
+                        {
+                            // Minutes ago
+                            return minutes + " minutes ago";
+                        }
                     } else
                     {
                         // Hours ago

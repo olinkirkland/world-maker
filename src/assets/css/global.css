@@ -87,7 +87,7 @@ s|Panel {
 }
 
 s|ButtonBar {
-    skinClass: ClassReference("ui.skins.ButtonBarSkinPageNavigation");
+    skinClass: ClassReference("ui.skins.ButtonBarSkin");
 }
 
 s|Button {
@@ -96,4 +96,8 @@ s|Button {
 
 s|CheckBox {
     skinClass: ClassReference("ui.skins.CheckBoxSkin");
+}
+
+s|DropDownList {
+    skinClass: ClassReference("ui.skins.DropDownListSkin");
 }
