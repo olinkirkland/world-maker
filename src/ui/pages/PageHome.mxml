@@ -1,7 +1,121 @@
 <?xml version="1.0"?>
 <pages:Page xmlns:fx="http://ns.adobe.com/mxml/2009"
             xmlns:s="library://ns.adobe.com/flex/spark"
-            xmlns:pages="ui.pages.*">
+            xmlns:pages="ui.pages.*"
+            creationComplete="onCreationComplete(event)">
+
+    <fx:Script><![CDATA[
+        import data.EngineData;
+        import data.EngineManager;
+        import data.NewsManager;
+        import data.PopupManager;
+        import data.ProjectData;
+        import data.ProjectManager;
+
+        import global.Color;
+
+        import global.Icons;
+        import global.Util;
+
+        import mx.collections.ArrayCollection;
+
+        import mx.events.FlexEvent;
+
+        import ui.popups.PopupInfoWithCheckBox;
+
+        private var recentProject:ProjectData;
+        private var recentEngine:EngineData;
+
+        private function onCreationComplete(event:FlexEvent):void
+        {
+            validateRecentProject();
+
+            listAllNews.dataProvider = new ArrayCollection(NewsManager.instance.news);
+
+            Util.timer.addEventListener(TimerEvent.TIMER, onTimer, false, 0, true);
+
+            // todo
+            //if (SettingsManager.instance.)
+
+            var p:PopupInfoWithCheckBox = new PopupInfoWithCheckBox();
+            p.width = 320;
+            p.header = "Welcome to Worldmaker!";
+            p.description = "There's lots of worlds to imagine, so let's get started. What will you make?";
+            p.callbackWithCheckBox = turnOffWelcomeScreen;
+            p.textCheckBox = "Don't show me this again.";
+            p.textConfirm = "I'm ready!";
+            p.checkBoxInitiallySelected = true;
+            PopupManager.open(p);
+        }
+
+        private function turnOffWelcomeScreen():void
+        {
+            // todo
+        }
+
+        private function onEngineAction(event:Event):void
+        {
+            setTimeout(function ():void
+            {
+                validateEngine();
+            }, 500);
+        }
+
+        private function validateEngine():void
+        {
+            var engineData:EngineData = EngineManager.instance.getEngineByVersion(recentProject.engine);
+            buttonOpen.enabled = engineData.installDirectory.exists;
+        }
+
+        override public function open():void
+        {
+            super.open();
+            validateRecentProject();
+        }
+
+        private function validateRecentProject():void
+        {
+            if (recentEngine)
+            {
+                recentEngine.removeEventListener(EngineData.CONTENT_READY, onEngineAction);
+                recentEngine.removeEventListener(EngineData.UNINSTALL, onEngineAction);
+            }
+
+            recentProject = null;
+            recentEngine = null;
+            for each (var project:ProjectData in ProjectManager.instance.projects.source)
+                if (!recentProject || project.dateModified > recentProject.dateModified)
+                    recentProject = project;
+
+            panelRecentProject.visible = panelRecentProject.includeInLayout = recentProject;
+            if (!recentProject)
+                return;
+
+            recentEngine = EngineManager.instance.getEngineByVersion(recentProject.engine);
+            recentEngine.addEventListener(EngineData.CONTENT_READY, onEngineAction);
+            recentEngine.addEventListener(EngineData.UNINSTALL, onEngineAction);
+
+            labelRecentProjectName.text = recentProject.name;
+            updateRelativeDateLabels();
+        }
+
+        private function onClickOpen(event:MouseEvent):void
+        {
+            ProjectManager.instance.launch(recentProject);
+        }
+
+        private function onTimer(event:TimerEvent):void
+        {
+            updateRelativeDateLabels();
+        }
+
+        private function updateRelativeDateLabels():void
+        {
+            if (recentProject)
+                labelRecentProjectDateModified.text = "Modified " + Util.toRelativeDate(recentProject.dateModified);
+        }
+        ]]></fx:Script>
+
     <s:VGroup width="100%"
               height="100%"
               gap="15">
@@ -10,17 +124,61 @@
         <s:HGroup width="100%"
                   height="100%"
                   gap="15">
-            <s:VGroup width="400"
+            <!--Recent News Carousel-->
+            <s:VGroup width="100%"
                       height="100%"
                       gap="15">
-                <s:Panel skinClass="ui.skins.PanelSkinOutline"
-                         width="100%">
-                    <s:VGroup width="100%">
-                        <s:Label width="100%"
-                                 text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Purus faucibus ornare suspendisse sed nisi lacus sed viverra. Ultrices in iaculis nunc sed augue."/>
-                    </s:VGroup>
+
+            </s:VGroup>
+
+            <!--All News & Most Recent Project-->
+            <s:VGroup width="320"
+                      height="100%"
+                      gap="15">
+                <s:List id="listAllNews"
+                        useVirtualLayout="false"
+                        width="100%"
+                        height="100%"
+                        contentBackgroundAlpha="0"
+                        borderVisible="false"
+                        horizontalScrollPolicy="off"
+                        itemRenderer="ui.itemRenderers.news.ItemRendererNews"/>
+
+                <s:Panel id="panelRecentProject"
+                         width="100%"
+                         skinClass="ui.skins.PanelSkinOutline">
+                    <s:HGroup width="100%"
+                              verticalAlign="bottom"
+                              padding="15">
+
+                        <s:VGroup width="100%"
+                                  gap="10">
+                            <s:Label width="100%"
+                                     text="Open your most recent World."
+                                     color="{Color.textLow}"/>
+
+                            <s:Spacer height="0"/>
+
+                            <s:Label id="labelRecentProjectName"
+                                     maxWidth="240"
+                                     maxDisplayedLines="1"
+                                     showTruncationTip="true"
+                                     styleName="header"/>
+
+                            <s:Label id="labelRecentProjectDateModified"
+                                     width="100%"/>
+                        </s:VGroup>
+
+                        <s:Button id="buttonOpen"
+                                  skinClass="ui.skins.ButtonThemeSkin"
+                                  icon="{Icons.Pen}"
+                                  label="Open"
+                                  click="onClickOpen(event)"/>
+                    </s:HGroup>
+
                 </s:Panel>
             </s:VGroup>
+
         </s:HGroup>
     </s:VGroup>
 </pages:Page>

@@ -92,7 +92,7 @@
                          width="100%">
                     <s:VGroup width="100%">
                         <s:Label width="100%"
-                                 text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Purus faucibus ornare suspendisse sed nisi lacus sed viverra. Ultrices in iaculis nunc sed augue."/>
+                                 text="Each version of the Worldmaker Engine has its own executable that can be downloaded and run independently. Worlds created with one version may not be compatible with another version."/>
                     </s:VGroup>
                 </s:Panel>
                 <s:Panel width="100%"

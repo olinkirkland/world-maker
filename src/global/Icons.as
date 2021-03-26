@@ -29,6 +29,12 @@ package global
         [Embed(source="/assets/icons/pen.png")]
         public static const Pen:Class;
 
+        [Embed(source="/assets/icons/link.png")]
+        public static const Link:Class;
+
+        [Embed(source="/assets/icons/page.png")]
+        public static const Page:Class;
+
         [Embed(source="/assets/icons/delete.png")]
         public static const Delete:Class;
 

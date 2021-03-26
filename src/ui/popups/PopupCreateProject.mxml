@@ -40,11 +40,6 @@
 
             inputName.text = getNextName();
             validateName();
-
-            callLater(function ():void
-            {
-                focusManager.setFocus(inputName);
-            });
         }
 
         private function getNextName():String

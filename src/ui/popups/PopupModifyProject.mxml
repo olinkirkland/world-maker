@@ -49,12 +49,6 @@
             }
 
             validateName();
-
-
-            callLater(function ():void
-            {
-                focusManager.setFocus(inputName);
-            });
         }
 
         public function get selectedEngine():EngineData

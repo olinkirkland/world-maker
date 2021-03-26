@@ -9,7 +9,7 @@ package global
 
         // Colors for visually important elements
         public static const themePrimary:uint = 0xffbb33;
-        public static const themeSecondary:uint = 0xfb433b;
+        public static const themeSecondary:uint = 0xfa5f5c;
 
         // Darkest to lightest fills
         public static const fillInset:uint = 0x1c2024;

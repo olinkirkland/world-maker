@@ -41,6 +41,12 @@
             validateProjects();
         }
 
+        override public function open():void
+        {
+            super.open();
+            validateProjects();
+        }
+
         private function onCreateProject(event:MouseEvent):void
         {
             var p:PopupCreateProject = new PopupCreateProject();
@@ -72,8 +78,8 @@
 
         private function validateProjects():void
         {
-            labelMyProjects.text = "My Projects (" + ProjectManager.instance.projects.length + "/" + ProjectManager.instance.projects.source.length + ")";
-            groupNoMatch.visible = ProjectManager.instance.projects.length == 0;
+            labelMyProjects.text = "My Worlds (" + ProjectManager.instance.projects.length + "/" + ProjectManager.instance.projects.source.length + ")";
+            groupNoMatch.visible = ProjectManager.instance.projects.length == 0 && ProjectManager.instance.projects.source.length > 0;
             groupNoProjects.visible = ProjectManager.instance.projects.source.length == 0;
         }
 
@@ -103,7 +109,7 @@
               height="100%"
               gap="15">
         <s:Label styleName="pageTitle"
-                 text="Projects"/>
+                 text="Worlds"/>
         <s:HGroup width="100%"
                   height="100%"
                   gap="15">
@@ -114,7 +120,7 @@
                          width="100%">
                     <s:VGroup width="100%">
                         <s:Label width="100%"
-                                 text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Purus faucibus ornare suspendisse sed nisi lacus sed viverra. Ultrices in iaculis nunc sed augue."/>
+                                 text="This is where you manage your Worlds. You can create new Worlds or import them from local storage."/>
                     </s:VGroup>
                 </s:Panel>
                 <s:Panel width="100%"
@@ -125,11 +131,11 @@
                               padding="10"
                               gap="5"
                               horizontalAlign="center">
-                        <s:Label text="Start a new Project"/>
+                        <s:Label text="Start a new World"/>
                         <s:Spacer height="5"/>
-                        <s:Button label="Create Project"
+                        <s:Button label="Create World"
                                   click="onCreateProject(event)"/>
-                        <s:Button label="Import Project"/>
+                        <s:Button label="Import World"/>
                     </s:VGroup>
                 </s:Panel>
             </s:VGroup>
@@ -188,8 +194,8 @@
                                 <s:VGroup horizontalAlign="center"
                                           gap="15"
                                           padding="15">
-                                    <s:Label text="You don't have any Projects."/>
-                                    <s:Button label="Create Project"
+                                    <s:Label text="You haven't created any Worlds."/>
+                                    <s:Button label="Create World"
                                               skinClass="ui.skins.ButtonThemeSkin"
                                               click="onCreateProject(event)"/>
                                 </s:VGroup>
@@ -205,7 +211,7 @@
                                 <s:VGroup horizontalAlign="center"
                                           gap="15"
                                           padding="15">
-                                    <s:Label text="No Projects match the search."/>
+                                    <s:Label text="No Worlds match your search."/>
                                 </s:VGroup>
                             </s:Panel>
                         </s:VGroup>
