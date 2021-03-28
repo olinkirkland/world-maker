@@ -2,15 +2,19 @@
 <pages:Page xmlns:fx="http://ns.adobe.com/mxml/2009"
             xmlns:s="library://ns.adobe.com/flex/spark"
             xmlns:pages="ui.pages.*"
+            xmlns:ui="ui.components.*"
             creationComplete="onCreationComplete(event)">
 
     <fx:Script><![CDATA[
         import data.EngineData;
         import data.EngineManager;
+        import data.NewsData;
         import data.NewsManager;
         import data.PopupManager;
         import data.ProjectData;
         import data.ProjectManager;
+
+        import events.PayloadEvent;
 
         import global.Color;
 
@@ -19,9 +23,18 @@
 
         import mx.collections.ArrayCollection;
 
+        import mx.collections.ArrayCollection;
+
         import mx.events.FlexEvent;
 
+        import spark.collections.Sort;
+        import spark.collections.SortField;
+        import spark.events.IndexChangeEvent;
+
+        import ui.itemRenderers.ItemRendererCarouselButton;
+
         import ui.popups.PopupInfoWithCheckBox;
+        import ui.popups.PopupNews;
 
         private var recentProject:ProjectData;
         private var recentEngine:EngineData;
@@ -30,7 +43,23 @@
         {
             validateRecentProject();
 
-            listAllNews.dataProvider = new ArrayCollection(NewsManager.instance.news);
+            var news:ArrayCollection = new ArrayCollection(NewsManager.instance.news);
+            var sortByDate:Sort = new Sort();
+            sortByDate.fields = [new SortField("date", true)];
+            news.sort = sortByDate;
+            news.refresh();
+            listAllNews.dataProvider = news;
+
+            var arr:Array = [];
+            var i:int = 0;
+            while (arr.length < 3 && i < news.length)
+            {
+                arr.push(news[i]);
+                i++;
+            }
+
+            listCarousel.dataProvider = new ArrayCollection(arr);
+            listCarousel.addEventListener(ItemRendererCarouselButton.SELECTED_CAROUSEL_BUTTON, onSelectedCarouselButton);
 
             Util.timer.addEventListener(TimerEvent.TIMER, onTimer, false, 0, true);
 
@@ -45,7 +74,16 @@
             p.textCheckBox = "Don't show me this again.";
             p.textConfirm = "I'm ready!";
             p.checkBoxInitiallySelected = true;
-            PopupManager.open(p);
+            //PopupManager.open(p);
+
+            listCarousel.selectedIndex = 0;
+            validateCarousel();
+            //callLater(validateCarousel);
+        }
+
+        private function onSelectedCarouselButton(event:PayloadEvent):void
+        {
+            listCarousel.selectedItem = event.payload;
         }
 
         private function turnOffWelcomeScreen():void
@@ -114,6 +152,26 @@
             if (recentProject)
                 labelRecentProjectDateModified.text = "Modified " + Util.toRelativeDate(recentProject.dateModified);
         }
+
+        private function onChangeCarousel(event:IndexChangeEvent):void
+        {
+            validateCarousel();
+        }
+
+        private function validateCarousel():void
+        {
+            var newsData:NewsData = listCarousel.selectedItem;
+            imageCarousel.source = newsData.getImage();
+            labelCarouselTitle.text = newsData.title;
+            labelCarouselBlurb.text = newsData.getText();
+        }
+
+        private function onClickOpenNews(event:MouseEvent):void
+        {
+            var p:PopupNews = new PopupNews();
+            p.newsData = listCarousel.selectedItem;
+            PopupManager.open(p);
+        }
         ]]></fx:Script>
 
     <s:VGroup width="100%"
@@ -125,11 +183,63 @@
                   height="100%"
                   gap="15">
             <!--Recent News Carousel-->
-            <s:VGroup width="100%"
-                      height="100%"
-                      gap="15">
+            <s:Group width="100%"
+                     height="100%">
+                <s:Image id="imageCarousel"
+                         width="100%"
+                         height="100%"
+                         horizontalAlign="center"
+                         verticalAlign="top"
+                         fillMode="scale"
+                         scaleMode="zoom"/>
+                <s:VGroup width="100%"
+                          height="100%"
+                          gap="15">
+                    <s:VGroup width="100%"
+                              height="100%"
+                              gap="10"
+                              padding="25"
+                              verticalAlign="bottom">
+                        <s:Group>
+                            <s:Rect width="100%"
+                                    height="100%">
+                                <s:fill>
+                                    <s:SolidColor color="{Color.black}"
+                                                  alpha=".8"/>
+                                </s:fill>
+                            </s:Rect>
+                            <s:VGroup padding="15"
+                                      gap="15">
+                                <s:Label id="labelCarouselTitle"
+                                         styleName="header"/>
+                                <s:Label id="labelCarouselBlurb"
+                                         maxWidth="320"
+                                         color="{Color.textHigh}"
+                                         maxDisplayedLines="3"/>
+                                <s:HGroup width="100%"
+                                          verticalAlign="middle">
+                                    <s:List id="listCarousel"
+                                            requireSelection="true"
+                                            borderVisible="false"
+                                            contentBackgroundAlpha="0"
+                                            itemRenderer="ui.itemRenderers.ItemRendererCarouselButton"
+                                            change="onChangeCarousel(event)">
+                                        <s:layout>
+                                            <s:HorizontalLayout gap="5"/>
+                                        </s:layout>
+                                    </s:List>
 
-            </s:VGroup>
+                                    <s:Spacer width="100%"/>
+                                    <s:Button icon="{Icons.Page}"
+                                              label="Read"
+                                              skinClass="ui.skins.ButtonTextSkin"
+                                              click="onClickOpenNews(event)"/>
+                                </s:HGroup>
+                            </s:VGroup>
+                        </s:Group>
+                    </s:VGroup>
+                </s:VGroup>
+            </s:Group>
 
             <!--All News & Most Recent Project-->
             <s:VGroup width="320"

@@ -2,8 +2,8 @@
 <popups:Popup xmlns:fx="http://ns.adobe.com/mxml/2009"
               xmlns:s="library://ns.adobe.com/flex/spark"
               xmlns:popups="ui.popups.*"
-              width="480"
-              maxHeight="480">
+              width="640"
+              maxHeight="640">
 
     <fx:Script><![CDATA[
         import data.NewsData;
@@ -74,19 +74,25 @@
                  text="{Util.toRelativeDate(newsData.date)}"
                  width="100%"/>
 
-        <s:List id="list"
-                useVirtualLayout="false"
-                width="100%"
-                height="100%"
-                contentBackgroundAlpha="0"
-                borderVisible="false"
-                horizontalScrollPolicy="off"
-                verticalScrollPolicy="auto"
-                itemRendererFunction="getItemRenderer">
-            <s:layout>
-                <s:VerticalLayout gap="10"/>
-            </s:layout>
-        </s:List>
+        <s:Scroller width="100%"
+                    height="100%"
+                    horizontalScrollPolicy="off"
+                    verticalScrollPolicy="auto">
+
+            <s:VGroup width="100%">
+                <s:List id="list"
+                        useVirtualLayout="false"
+                        width="100%"
+                        contentBackgroundAlpha="0"
+                        borderVisible="false"
+                        itemRendererFunction="getItemRenderer">
+                    <s:layout>
+                        <s:VerticalLayout gap="25"/>
+                    </s:layout>
+                </s:List>
+            </s:VGroup>
+
+        </s:Scroller>
 
     </s:VGroup>
 </popups:Popup>

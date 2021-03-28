@@ -55,8 +55,7 @@
 
     <s:VGroup padding="5"
               width="100%">
-        <s:Panel skinClass="ui.skins.PanelSkinOutline"
-                 width="100%">
+        <s:Panel width="100%">
 
             <s:HGroup width="100%"
                       horizontalAlign="right"
@@ -80,7 +79,7 @@
 
                 <s:Button id="buttonOpen"
                           icon="{Icons.Page}"
-                          label="Open"
+                          label="Read"
                           click="onClickOpen(event)"/>
 
             </s:HGroup>

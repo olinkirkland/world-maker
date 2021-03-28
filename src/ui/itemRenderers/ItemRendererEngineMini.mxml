@@ -44,7 +44,10 @@
                 return;
 
             engineData = EngineData(value);
-            labelVersion.text = engineData.version;
+            labelVersion.text = engineData.version.substr(0, engineData.version.indexOf(" "));
+            if (labelVersion.text.length == 0)
+                labelVersion.text = engineData.version;
+            labelVersion.toolTip = engineData.version;
 
             validateMode();
         }
@@ -105,7 +108,10 @@
             <s:Label id="labelVersion"
                      color="{Color.textMedium}"
                      color.down="{Color.textLow}"
-                     color.selected="{Color.textLow}"/>
+                     color.selected="{Color.textLow}"
+                     maxWidth="60"
+                     maxDisplayedLines="1"
+                     showTruncationTip="true"/>
 
             <s:Spacer width="100%"/>
 

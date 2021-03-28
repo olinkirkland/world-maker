@@ -70,6 +70,10 @@ s|TextInput {
 Scrollbars
  */
 
+s|Scroller {
+    skinClass: ClassReference("ui.skins.scrollbars.ScrollerSkin");
+}
+
 s|VScrollBar {
     skinClass: ClassReference("ui.skins.scrollbars.VScrollBarSkin");
 }

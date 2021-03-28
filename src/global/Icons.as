@@ -14,8 +14,17 @@ package global
         [Embed(source="/assets/icons/settings.png")]
         public static const Settings:Class;
 
+        [Embed(source="/assets/icons/radioButtonEmpty.png")]
+        public static const RadioButtonEmpty:Class;
+
+        [Embed(source="/assets/icons/radioButtonFilled.png")]
+        public static const RadioButtonFilled:Class;
+
         [Embed(source="/assets/icons/down.png")]
         public static const Down:Class;
+
+        [Embed(source="/assets/icons/image.png")]
+        public static const Image:Class;
 
         [Embed(source="/assets/icons/plant.png")]
         public static const Plant:Class;
@@ -31,6 +40,15 @@ package global
 
         [Embed(source="/assets/icons/link.png")]
         public static const Link:Class;
+
+        [Embed(source="/assets/icons/play.png")]
+        public static const Play:Class;
+
+        [Embed(source="/assets/icons/pause.png")]
+        public static const Pause:Class;
+
+        [Embed(source="/assets/icons/fullscreen.png")]
+        public static const Fullscreen:Class;
 
         [Embed(source="/assets/icons/page.png")]
         public static const Page:Class;
@@ -85,5 +103,8 @@ package global
 
         [Embed(source="/assets/icons/sort.png")]
         public static const Sort:Class;
+
+        [Embed(source="/assets/icons/replay.png")]
+        public static const Replay:Class;
     }
 }

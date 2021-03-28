@@ -28,6 +28,8 @@
         import mx.managers.ToolTipManager;
         import mx.utils.UIDUtil;
 
+        import org.osmf.utils.OSMFSettings;
+
         import spark.events.ElementExistenceEvent;
         import spark.events.IndexChangeEvent;
 
@@ -46,6 +48,9 @@
 
         private function onCreationComplete(event:FlexEvent):void
         {
+            // Workaround for stage video
+            OSMFSettings.enableStageVideo = false;
+
             addEventListeners();
 
             ToolTipManager.showDelay = 0;

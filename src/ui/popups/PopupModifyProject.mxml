@@ -157,7 +157,7 @@
                         useVirtualLayout="false"
                         width="100%"
                         height="100%"
-                        maxHeight="120"
+                        maxHeight="180"
                         contentBackgroundAlpha="0"
                         borderVisible="false"
                         horizontalScrollPolicy="off"
