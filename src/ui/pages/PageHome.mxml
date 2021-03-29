@@ -9,10 +9,12 @@
         import data.EngineData;
         import data.EngineManager;
         import data.NewsData;
+        import data.NewsData;
         import data.NewsManager;
         import data.PopupManager;
         import data.ProjectData;
         import data.ProjectManager;
+        import data.SettingsManager;
 
         import events.PayloadEvent;
 
@@ -39,9 +41,13 @@
         private var recentProject:ProjectData;
         private var recentEngine:EngineData;
 
+        private var carouselImages:Array;
+
         private function onCreationComplete(event:FlexEvent):void
         {
             validateRecentProject();
+
+            carouselImages = [imageCarousel1, imageCarousel2, imageCarousel3];
 
             var news:ArrayCollection = new ArrayCollection(NewsManager.instance.news);
             var sortByDate:Sort = new Sort();
@@ -63,22 +69,28 @@
 
             Util.timer.addEventListener(TimerEvent.TIMER, onTimer, false, 0, true);
 
-            // todo
-            //if (SettingsManager.instance.)
-
-            var p:PopupInfoWithCheckBox = new PopupInfoWithCheckBox();
-            p.width = 320;
-            p.header = "Welcome to Worldmaker!";
-            p.description = "There's lots of worlds to imagine, so let's get started. What will you make?";
-            p.callbackWithCheckBox = turnOffWelcomeScreen;
-            p.textCheckBox = "Don't show me this again.";
-            p.textConfirm = "I'm ready!";
-            p.checkBoxInitiallySelected = true;
-            //PopupManager.open(p);
+            if (SettingsManager.instance.getProperty("firstRunPopup"))
+            {
+                var p:PopupInfoWithCheckBox = new PopupInfoWithCheckBox();
+                p.width = 320;
+                p.header = "Welcome to Worldmaker!";
+                p.description = "There's lots of worlds to imagine, so let's get started. What will you make?";
+                p.callbackWithoutCheckBox = turnOffWelcomeScreen;
+                p.textCheckBox = "Show this Popup when the app starts";
+                p.textConfirm = "I'm ready!";
+                p.checkBoxInitiallySelected = true;
+                PopupManager.open(p);
+            }
 
             listCarousel.selectedIndex = 0;
             validateCarousel();
-            //callLater(validateCarousel);
+            preloadCarouselImages();
+        }
+
+        private function preloadCarouselImages():void
+        {
+            for (var i:int = 0; i < listCarousel.dataProvider.length; i++)
+                carouselImages[i].source = NewsData(listCarousel.dataProvider.getItemAt(i)).getImage();
         }
 
         private function onSelectedCarouselButton(event:PayloadEvent):void
@@ -88,7 +100,7 @@
 
         private function turnOffWelcomeScreen():void
         {
-            // todo
+            SettingsManager.instance.setProperty("firstRunPopup", false);
         }
 
         private function onEngineAction(event:Event):void
@@ -161,7 +173,11 @@
         private function validateCarousel():void
         {
             var newsData:NewsData = listCarousel.selectedItem;
-            imageCarousel.source = newsData.getImage();
+
+            for each(var image in carouselImages)
+                image.visible = false;
+            carouselImages[listCarousel.selectedIndex].visible = true;
+
             labelCarouselTitle.text = newsData.title;
             labelCarouselBlurb.text = newsData.getText();
         }
@@ -185,7 +201,21 @@
             <!--Recent News Carousel-->
             <s:Group width="100%"
                      height="100%">
-                <s:Image id="imageCarousel"
+                <s:Image id="imageCarousel1"
+                         width="100%"
+                         height="100%"
+                         horizontalAlign="center"
+                         verticalAlign="top"
+                         fillMode="scale"
+                         scaleMode="zoom"/>
+                <s:Image id="imageCarousel2"
+                         width="100%"
+                         height="100%"
+                         horizontalAlign="center"
+                         verticalAlign="top"
+                         fillMode="scale"
+                         scaleMode="zoom"/>
+                <s:Image id="imageCarousel3"
                          width="100%"
                          height="100%"
                          horizontalAlign="center"

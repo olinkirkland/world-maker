@@ -53,6 +53,7 @@
         {
             video.stop();
             groupReplay.includeInLayout = groupReplay.visible = true;
+            buttonTogglePlay.visible = buttonTogglePlay.enabled = false;
 
             validatePlayButton();
         }
@@ -64,6 +65,8 @@
             pauseOverlay.visible = !video.playing;
             pauseOverlayRect.visible = pauseOverlay.visible;
             groupReplay.includeInLayout = groupReplay.visible = false;
+            buttonTogglePlay.visible = buttonTogglePlay.enabled = true;
+
         }
         ]]>
     </fx:Script>

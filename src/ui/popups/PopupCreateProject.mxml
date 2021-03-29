@@ -111,7 +111,7 @@
     <s:VGroup gap="15"
               width="100%">
 
-        <s:Label text="Create a new Project"
+        <s:Label text="Create a new World"
                  width="100%"
                  styleName="header"/>
 
@@ -121,7 +121,7 @@
                       height="100%"
                       gap="5">
 
-                <s:Label text="Enter a Title for this Project"
+                <s:Label text="Enter a Title for this World"
                          width="100%"/>
                 <s:HGroup width="100%"
                           gap="10"
@@ -131,7 +131,7 @@
                                       width="100%"
                                       change="onChangeInputName(event)"/>
                     <s:Group id="groupImageNameValidation"
-                             toolTip="Project names must be at least 1 character long and unique">
+                             toolTip="World names must be at least 1 character long and unique">
                         <ui:ColorBitmapImage id="imageNameValidation"
                                              width="16"
                                              height="16"
@@ -177,7 +177,7 @@
                 </s:List>
 
                 <s:Label width="100%"
-                         text="Projects can be opened with any Engine. The Engine specified here will be the default for this Project."/>
+                         text="Worlds can be opened with any Engine. The Engine specified here will be the default for this World."/>
 
             </s:VGroup>
         </s:Panel>

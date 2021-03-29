@@ -161,9 +161,9 @@
             <s:HGroup id="groupDownloaded"
                       width="100%"
                       horizontalAlign="right">
-                <s:Button id="buttonDelete"
-                          label="Remove"
-                          click="onClickDelete(event)"/>
+<!--                <s:Button id="buttonDelete"-->
+                <!--                          label="Remove"-->
+                <!--                          click="onClickDelete(event)"/>-->
             </s:HGroup>
 
             <!--Not Downloaded-->

@@ -85,7 +85,7 @@
         <s:HGroup width="100%"
                   height="100%"
                   gap="15">
-            <s:VGroup width="400"
+            <s:VGroup width="240"
                       height="100%"
                       gap="15">
                 <s:Panel skinClass="ui.skins.PanelSkinOutline"
@@ -98,43 +98,49 @@
                 <s:Panel width="100%"
                          height="100%"
                          skinClass="ui.skins.PanelSkinPageSection">
-                    <s:Group width="100%"
-                             height="100%">
+                    <s:VGroup width="100%"
+                              height="100%"
+                              padding="10"
+                              gap="5"
+                              horizontalAlign="center">
+                        <s:Label text="Installed Engines"/>
+                        <s:Spacer height="5"/>
+                        <s:Group width="100%"
+                                 height="100%">
 
-                        <s:VGroup id="groupNoInstalledEngines"
-                                  width="100%"
-                                  height="100%"
-                                  horizontalAlign="center"
-                                  verticalAlign="middle">
-                            <s:Panel>
-                                <s:VGroup horizontalAlign="center"
-                                          gap="15"
-                                          padding="15">
-                                    <s:Label text="You don't have any Engines installed."/>
-                                </s:VGroup>
-                            </s:Panel>
-                        </s:VGroup>
+                            <s:VGroup id="groupNoInstalledEngines"
+                                      width="100%"
+                                      height="100%"
+                                      horizontalAlign="center">
+                                <s:Panel width="100%">
+                                    <s:VGroup width="100%"
+                                              horizontalAlign="center"
+                                              padding="10">
+                                        <s:Label text="You don't have any Engines installed."
+                                                 width="100%"/>
+                                    </s:VGroup>
+                                </s:Panel>
+                            </s:VGroup>
 
-                        <s:VGroup id="groupInstalledEngines"
-                                  width="100%"
-                                  height="100%"
-                                  padding="10"
-                                  gap="10">
-                            <s:Label text="Installed"/>
-                            <s:List id="listInstalledEngines"
-                                    useVirtualLayout="false"
-                                    width="100%"
-                                    height="100%"
-                                    contentBackgroundAlpha="0"
-                                    borderVisible="false"
-                                    itemRenderer="ui.itemRenderers.ItemRendererEngine">
-                                <s:layout>
-                                    <s:VerticalLayout gap="10"/>
-                                </s:layout>
-                            </s:List>
-                        </s:VGroup>
+                            <s:VGroup id="groupInstalledEngines"
+                                      width="100%"
+                                      height="100%">
+                                <s:List id="listInstalledEngines"
+                                        useVirtualLayout="false"
+                                        width="100%"
+                                        height="100%"
+                                        horizontalScrollPolicy="off"
+                                        contentBackgroundAlpha="0"
+                                        borderVisible="false"
+                                        itemRenderer="ui.itemRenderers.ItemRendererEngineWithDelete">
+                                    <s:layout>
+                                        <s:VerticalLayout gap="10"/>
+                                    </s:layout>
+                                </s:List>
+                            </s:VGroup>
 
-                    </s:Group>
+                        </s:Group>
+                    </s:VGroup>
                 </s:Panel>
             </s:VGroup>
 

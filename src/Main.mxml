@@ -15,6 +15,7 @@
     <fx:Script><![CDATA[
         import data.EngineManager;
         import data.NewsManager;
+        import data.PopupManager;
         import data.Signal;
 
         import events.PopupEvent;
@@ -38,8 +39,8 @@
         import ui.pages.PageEngine;
         import ui.pages.PageHome;
         import ui.pages.PageProjects;
-        import ui.pages.PageSettings;
         import ui.popups.Popup;
+        import ui.popups.PopupSettings;
 
         private var pages:Object;
         private var currentPage:Page;
@@ -128,7 +129,9 @@
 
         private function clearDownloadsDirectory():void
         {
-            // todo
+            var dir:File = File.applicationStorageDirectory.resolvePath("downloads");
+            for each (var file:File in dir.getDirectoryListing())
+                file.deleteFile();
         }
 
         private function finishPreload():void
@@ -136,15 +139,13 @@
             pages = {
                 home: new PageHome(),
                 projects: new PageProjects(),
-                engine: new PageEngine(),
-                settings: new PageSettings()
+                engine: new PageEngine()
             };
 
             buttonBarNavigation.dataProvider = new ArrayCollection([
                 {label: "Home", id: "home"},
                 {label: "Worlds", id: "projects"},
-                {label: "Engine", id: "engine"},
-                {label: "Settings", id: "settings"}]);
+                {label: "Engine", id: "engine"}]);
 
             validatePageNavigation();
 
@@ -207,6 +208,12 @@
                 popupModalRectangle.includeInLayout = popupModalRectangle.visible = groupPopups.numElements > 0;
             });
         }
+
+        private function onSettings(event:MouseEvent):void
+        {
+            var p:PopupSettings = new PopupSettings();
+            PopupManager.open(p);
+        }
         ]]></fx:Script>
 
     <s:Rect width="100%"
@@ -241,11 +248,19 @@
 
             <s:Spacer width="100%"/>
 
-            <s:ButtonBar id="buttonBarNavigation"
-                         skinClass="ui.skins.ButtonBarSkinPageNavigation"
-                         change="{onChangeNavigation(event)}"
-                         requireSelection="true"
-                         labelField="label"/>
+            <s:HGroup gap="10"
+                      verticalAlign="middle"
+                      padding="5">
+                <s:ButtonBar id="buttonBarNavigation"
+                             skinClass="ui.skins.ButtonBarSkinPageNavigation"
+                             change="{onChangeNavigation(event)}"
+                             requireSelection="true"
+                             labelField="label"/>
+                <s:Button skinClass="ui.skins.ButtonSkinIconPageNavigation"
+                          toolTip="Settings"
+                          click="onSettings(event)"
+                          icon="{Icons.Settings}"/>
+            </s:HGroup>
         </s:HGroup>
 
         <!--Contains selected page-->
