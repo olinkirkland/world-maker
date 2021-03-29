@@ -16,6 +16,7 @@
         import data.EngineManager;
         import data.NewsManager;
         import data.PopupManager;
+        import data.SettingsManager;
         import data.Signal;
 
         import events.PopupEvent;
@@ -40,6 +41,7 @@
         import ui.pages.PageHome;
         import ui.pages.PageProjects;
         import ui.popups.Popup;
+        import ui.popups.PopupInfoWithCheckBox;
         import ui.popups.PopupSettings;
 
         private var pages:Object;
@@ -152,9 +154,30 @@
             setTimeout(function ():void
             {
                 preloader.visible = false;
-                //buttonBarNavigation.selectedIndex = 1;
+                for each (var page:Object in buttonBarNavigation.dataProvider)
+                    if (page.id == SettingsManager.instance.getProperty("initialPage"))
+                        buttonBarNavigation.selectedItem = page;
+
                 onChangeNavigation(null);
+
+                if (SettingsManager.instance.getProperty("firstRunPopup"))
+                {
+                    var p:PopupInfoWithCheckBox = new PopupInfoWithCheckBox();
+                    p.width = 320;
+                    p.header = "Welcome to Worldmaker!";
+                    p.description = "There are many of worlds to imagine, so let's get started. What will you make?";
+                    p.callbackWithoutCheckBox = turnOffWelcomeScreen;
+                    p.textCheckBox = "Show this Popup when the app starts";
+                    p.textConfirm = "I'm ready!";
+                    p.checkBoxInitiallySelected = true;
+                    PopupManager.open(p);
+                }
             }, 100);
+        }
+
+        private function turnOffWelcomeScreen():void
+        {
+            SettingsManager.instance.setProperty("firstRunPopup", false);
         }
 
         private function validatePageNavigation():void

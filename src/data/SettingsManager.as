@@ -8,7 +8,10 @@ package data
         private static var _instance:SettingsManager;
 
         private static var shared:SharedObject;
-        private static var defaultProperties:Object = {firstRunPopup: true};
+        private static var defaultProperties:Object = {
+            firstRunPopup: true,
+            initialPage: "home"
+        };
 
         public function SettingsManager()
         {

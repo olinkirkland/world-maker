@@ -69,19 +69,6 @@
 
             Util.timer.addEventListener(TimerEvent.TIMER, onTimer, false, 0, true);
 
-            if (SettingsManager.instance.getProperty("firstRunPopup"))
-            {
-                var p:PopupInfoWithCheckBox = new PopupInfoWithCheckBox();
-                p.width = 320;
-                p.header = "Welcome to Worldmaker!";
-                p.description = "There's lots of worlds to imagine, so let's get started. What will you make?";
-                p.callbackWithoutCheckBox = turnOffWelcomeScreen;
-                p.textCheckBox = "Show this Popup when the app starts";
-                p.textConfirm = "I'm ready!";
-                p.checkBoxInitiallySelected = true;
-                PopupManager.open(p);
-            }
-
             listCarousel.selectedIndex = 0;
             validateCarousel();
             preloadCarouselImages();
@@ -96,11 +83,6 @@
         private function onSelectedCarouselButton(event:PayloadEvent):void
         {
             listCarousel.selectedItem = event.payload;
-        }
-
-        private function turnOffWelcomeScreen():void
-        {
-            SettingsManager.instance.setProperty("firstRunPopup", false);
         }
 
         private function onEngineAction(event:Event):void
