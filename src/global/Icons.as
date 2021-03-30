@@ -14,6 +14,9 @@ package global
         [Embed(source="/assets/icons/settings.png")]
         public static const Settings:Class;
 
+        [Embed(source="/assets/icons/dragAndDrop.png")]
+        public static const DragAndDrop:Class;
+
         [Embed(source="/assets/icons/radioButtonEmpty.png")]
         public static const RadioButtonEmpty:Class;
 

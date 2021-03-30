@@ -26,6 +26,7 @@
         import spark.events.TextOperationEvent;
 
         import ui.popups.PopupCreateProject;
+        import ui.popups.PopupImportProject;
 
         private function onCreationComplete(event:FlexEvent):void
         {
@@ -52,6 +53,19 @@
             var p:PopupCreateProject = new PopupCreateProject();
             p.callbackConfirm = createProject;
             PopupManager.open(p);
+        }
+
+        private function onImportProject(event:MouseEvent):void
+        {
+            var p:PopupImportProject = new PopupImportProject();
+            p.callbackConfirm = importProject;
+            PopupManager.open(p);
+        }
+
+        private function importProject(projectData:ProjectData):void
+        {
+            ProjectManager.instance.addProject(projectData);
+            validateSort();
         }
 
         private function createProject(p:PopupCreateProject):void
@@ -135,7 +149,8 @@
                         <s:Spacer height="5"/>
                         <s:Button label="Create World"
                                   click="onCreateProject(event)"/>
-                        <s:Button label="Import World"/>
+                        <s:Button label="Import World"
+                                  click="onImportProject(event)"/>
                     </s:VGroup>
                 </s:Panel>
             </s:VGroup>
