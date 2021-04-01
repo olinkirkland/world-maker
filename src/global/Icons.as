@@ -5,6 +5,9 @@ package global
         [Embed(source="/assets/icons/castle.png")]
         public static const Castle:Class;
 
+        [Embed(source="/assets/icons/castle-new.png")]
+        public static const CastleNew:Class;
+
         [Embed(source="/assets/icons/home.png")]
         public static const Home:Class;
 
@@ -14,8 +17,14 @@ package global
         [Embed(source="/assets/icons/settings.png")]
         public static const Settings:Class;
 
-        [Embed(source="/assets/icons/dragAndDrop.png")]
-        public static const DragAndDrop:Class;
+        [Embed(source="/assets/icons/import.png")]
+        public static const Import:Class;
+
+        [Embed(source="/assets/icons/import-no.png")]
+        public static const ImportNo:Class;
+
+        [Embed(source="/assets/icons/import-yes.png")]
+        public static const ImportYes:Class;
 
         [Embed(source="/assets/icons/radioButtonEmpty.png")]
         public static const RadioButtonEmpty:Class;
@@ -38,8 +47,8 @@ package global
         [Embed(source="/assets/icons/add.png")]
         public static const Add:Class;
 
-        [Embed(source="/assets/icons/pen.png")]
-        public static const Pen:Class;
+        [Embed(source="/assets/icons/logo.png")]
+        public static const Logo:Class;
 
         [Embed(source="/assets/icons/link.png")]
         public static const Link:Class;
@@ -91,6 +100,9 @@ package global
 
         [Embed(source="/assets/icons/checkmark.png")]
         public static const Checkmark:Class;
+
+        [Embed(source="/assets/icons/unavailable.png")]
+        public static const Unavailable:Class;
 
         [Embed(source="/assets/icons/refresh.png")]
         public static const Refresh:Class;

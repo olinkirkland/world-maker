@@ -293,7 +293,6 @@
 
                         <s:Button id="buttonOpen"
                                   skinClass="ui.skins.ButtonThemeSkin"
-                                  icon="{Icons.Pen}"
                                   label="Open"
                                   click="onClickOpen(event)"/>
                     </s:HGroup>

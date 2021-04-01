@@ -28,6 +28,9 @@
                 // Force the location
                 visible = true;
                 var target:DisplayObject = ToolTipManager.currentTarget;
+                if (!target)
+                    return;
+
                 var targetWidth:int = target.localToGlobal(new Point(target.width, 0)).x;
 
                 callLater(function ():void

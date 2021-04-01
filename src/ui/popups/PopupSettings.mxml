@@ -6,10 +6,12 @@
               maxHeight="640">
 
     <fx:Script><![CDATA[
+        import data.PopupManager;
         import data.SettingsManager;
         import data.SettingsManager;
 
         import global.Icons;
+        import global.Settings;
 
         import mx.collections.ArrayCollection;
 
@@ -57,6 +59,14 @@
         {
             SettingsManager.instance.setProperty("firstRunPopup", checkBoxFirstRunPopup.selected);
         }
+
+        private function onLicense(event:MouseEvent):void
+        {
+            var p:PopupInfo = new PopupInfo();
+            p.header = "License";
+            p.description = License.text;
+            PopupManager.open(p);
+        }
         ]]>
     </fx:Script>
 
@@ -86,6 +96,7 @@
                 <s:VGroup width="100%"
                           height="100%"
                           gap="15">
+                    <s:Label text="Worldmaker Launcher v{Settings.version}"/>
                     <s:Panel skinClass="ui.skins.PanelSkinOutline"
                              width="100%">
                         <s:VGroup width="100%"
@@ -115,6 +126,17 @@
                                   padding="15">
                             <s:Button label="Reset to Defaults"
                                       click="onResetDefaults(event)"/>
+                        </s:VGroup>
+                    </s:Panel>
+
+                    <s:Panel skinClass="ui.skins.PanelSkinOutline"
+                             width="100%">
+                        <s:VGroup width="100%"
+                                  height="100%"
+                                  gap="15"
+                                  padding="15">
+                            <s:Button label="License"
+                                      click="onLicense(event)"/>
                         </s:VGroup>
                     </s:Panel>
 

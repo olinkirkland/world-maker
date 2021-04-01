@@ -41,6 +41,7 @@
         import ui.pages.PageHome;
         import ui.pages.PageProjects;
         import ui.popups.Popup;
+        import ui.popups.PopupConfirm;
         import ui.popups.PopupInfoWithCheckBox;
         import ui.popups.PopupSettings;
 
@@ -124,8 +125,18 @@
 
             urlStream.addEventListener(IOErrorEvent.IO_ERROR, function (event:IOErrorEvent):void
             {
+                EngineManager.instance.load(meta.versions);
+                NewsManager.instance.load(meta.news);
+
                 // Error downloading Metadata
-                finishPreload();
+                var p:PopupConfirm = new PopupConfirm();
+                p.callbackConfirm = finishPreload;
+                p.callbackCancel = preload;
+                p.header = "Connection Error";
+                p.description = "Couldn't download the metadata. Start anyway?";
+                p.textConfirm = "Start anyway";
+                p.textCancel = "Try again";
+                PopupManager.open(p);
             });
         }
 
@@ -138,6 +149,8 @@
 
         private function finishPreload():void
         {
+
+
             pages = {
                 home: new PageHome(),
                 projects: new PageProjects(),
@@ -258,12 +271,12 @@
 
             <s:HGroup height="100%"
                       verticalAlign="middle"
-                      gap="5">
+                      gap="10">
                 <s:Label text="Worldmaker"
                          fontSize="24"
                          fontFamily="Logo"
                          color="{Color.themePrimary}"/>
-                <components:ColorBitmapImage source="{Icons.Pen}"
+                <components:ColorBitmapImage source="{Icons.Logo}"
                                              color="{Color.themePrimary}"
                                              width="16"
                                              height="16"/>
@@ -328,12 +341,12 @@
                           horizontalAlign="center"
                           verticalAlign="middle"
                           padding="25"
-                          gap="10">
+                          gap="15">
                     <s:Label text="Worldmaker"
                              fontSize="42"
                              fontFamily="Logo"
                              color="{Color.themePrimary}"/>
-                    <components:ColorBitmapImage source="{Icons.Pen}"
+                    <components:ColorBitmapImage source="{Icons.Logo}"
                                                  color="{Color.themePrimary}"
                                                  width="24"
                                                  height="24"/>

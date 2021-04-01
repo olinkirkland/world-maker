@@ -15,7 +15,7 @@
               horizontalAlign="center"
               verticalAlign="middle"
               padding="10">
-        <ui:ColorBitmapImage source="{Icons.Pen}"
+        <ui:ColorBitmapImage source="{Icons.Logo}"
                              color="{Color.themePrimary}"
                              width="24"
                              height="24"/>

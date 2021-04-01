@@ -155,5 +155,10 @@ package global
 
             return n + " GB";
         }
+
+        public static function toColorHex(color:uint):String
+        {
+            return "#" + color.toString(16);
+        }
     }
 }

@@ -48,7 +48,7 @@
             var currentName:String = baseName;
             var i:int = 1;
             while (nameExists(currentName))
-                currentName = baseName + " " + i++;
+                currentName = baseName + " (" + i++ + ")";
 
             function nameExists(str:String):Boolean
             {
@@ -121,7 +121,7 @@
                       height="100%"
                       gap="5">
 
-                <s:Label text="Enter a Title for this World"
+                <s:Label text="Enter a name for this World"
                          width="100%"/>
                 <s:HGroup width="100%"
                           gap="10"

@@ -37,7 +37,10 @@ package data
 
         public function remove():void
         {
-            file.deleteFile();
+            if (file.exists)
+                file.deleteFile();
+            else
+                trace("Error! File does not exist so it cannot be deleted:\n  " + file.nativePath);
             ProjectManager.instance.projects.removeItem(this);
             ProjectManager.instance.projects.refresh();
         }
