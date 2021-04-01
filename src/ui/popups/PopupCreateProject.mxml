@@ -87,6 +87,8 @@
             engines.filterFunction = checkBoxFilterByInstall.selected ? filterByInstall : null;
             engines.sort = sortByDate;
             engines.refresh();
+
+            buttonConfirm.enabled = engines.length;
         }
 
         private function filterByInstall(engineData:EngineData):Boolean

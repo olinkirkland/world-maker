@@ -72,6 +72,7 @@
             listCarousel.selectedIndex = 0;
             validateCarousel();
             preloadCarouselImages();
+            validateEngine();
         }
 
         private function preloadCarouselImages():void
@@ -95,6 +96,9 @@
 
         private function validateEngine():void
         {
+            if (!recentProject)
+                return;
+
             var engineData:EngineData = EngineManager.instance.getEngineByVersion(recentProject.engine);
             buttonOpen.enabled = engineData.installDirectory.exists;
         }
@@ -276,7 +280,7 @@
                         <s:VGroup width="100%"
                                   gap="10">
                             <s:Label width="100%"
-                                     text="Open your most recent World."
+                                     text="Open your most recent World"
                                      color="{Color.textLow}"/>
 
                             <s:Spacer height="0"/>

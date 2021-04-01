@@ -105,7 +105,7 @@ package data
 
             function onUnzipComplete(e:Event):void
             {
-                trace("Unzip complete");
+                trace("Unzipping complete");
                 var fileStream:FileStream = new FileStream();
                 var fileCount:int = zip.getFileCount();
                 for (var i:int = 0; i < fileCount; i++)
@@ -120,7 +120,7 @@ package data
                     fileStream.close();
                 }
 
-                trace("Unzipping complete!")
+                trace("Extracting complete");
                 dispatchEvent(new Event(CONTENT_READY));
                 EngineManager.instance.enginesChanged();
             }

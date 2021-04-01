@@ -143,6 +143,8 @@
         private function clearDownloadsDirectory():void
         {
             var dir:File = File.applicationStorageDirectory.resolvePath("downloads");
+            if (!dir.exists)
+                dir.createDirectory();
             for each (var file:File in dir.getDirectoryListing())
                 file.deleteFile();
         }

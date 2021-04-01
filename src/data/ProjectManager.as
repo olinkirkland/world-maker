@@ -87,17 +87,9 @@ package data
 
             var window:ProjectWindow = new ProjectWindow();
             window.open(true);
-            var bounds:Rectangle = Screen.mainScreen.bounds;
-            window.x = bounds.x;
-            window.y = bounds.y;
-//            window.width = bounds.width;
-//            window.height = bounds.height;
-//            window.maximize();
-            window.width = 200;
-            window.height = 200;
 
             // Load project swf
-            var swfFile:File = EngineManager.instance.getEngineByVersion(projectData.engine).installDirectory.resolvePath("Main.swf");
+            var swfFile:File = EngineManager.instance.getEngineByVersion(projectData.engine).installDirectory.resolvePath("Engine.swf");
             var fileStream:FileStream = new FileStream();
             fileStream.open(swfFile, FileMode.READ);
 

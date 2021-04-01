@@ -64,7 +64,7 @@
         private function onLicense(event:MouseEvent):void
         {
             var p:PopupInfo = new PopupInfo();
-            p.header = "global.License";
+            p.header = "Software License";
             p.description = License.text;
             PopupManager.open(p);
         }
