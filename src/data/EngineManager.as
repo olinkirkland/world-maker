@@ -24,6 +24,15 @@ package data
             dispatchEvent(new Event(ENGINES_CHANGED));
         }
 
+        public function hasAnyEnginesInstalled():Boolean
+        {
+            for each (var engine:EngineData in engines)
+                if (engine.installDirectory.exists)
+                    return true;
+
+            return false;
+        }
+
         public function load(arr:Array):void
         {
             var folder:File = File.applicationStorageDirectory.resolvePath("versions");

@@ -2,24 +2,20 @@
 <popups:Popup xmlns:fx="http://ns.adobe.com/mxml/2009"
               xmlns:s="library://ns.adobe.com/flex/spark"
               xmlns:popups="ui.popups.*"
-              xmlns:ui="ui.components.*"
               width="320">
 
     <fx:Script><![CDATA[
         import data.EngineData;
         import data.EngineManager;
         import data.ProjectData;
-        import data.ProjectManager;
 
         import global.Color;
-        import global.Icons;
 
         import mx.collections.ArrayCollection;
         import mx.events.FlexEvent;
 
         import spark.collections.Sort;
         import spark.collections.SortField;
-        import spark.events.TextOperationEvent;
 
         public var callbackConfirm:Function = null;
         public var callbackDelete:Function = null;
@@ -38,6 +34,8 @@
             engines.sort = sortByDate;
             engines.filterFunction = filterByInstall;
             engines.refresh();
+
+            buttonOpen.enabled = engines.length > 0;
 
             listEngines.dataProvider = engines;
         }

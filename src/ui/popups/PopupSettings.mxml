@@ -11,6 +11,7 @@
         import data.SettingsManager;
 
         import global.Icons;
+        import global.License;
         import global.Settings;
 
         import mx.collections.ArrayCollection;
@@ -63,7 +64,7 @@
         private function onLicense(event:MouseEvent):void
         {
             var p:PopupInfo = new PopupInfo();
-            p.header = "License";
+            p.header = "global.License";
             p.description = License.text;
             PopupManager.open(p);
         }

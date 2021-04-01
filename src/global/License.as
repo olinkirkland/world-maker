@@ -1,4 +1,4 @@
-package
+package global
 {
     public class License
     {

@@ -36,7 +36,7 @@
             dropDownListSort.dataProvider = new ArrayCollection([
                 {sort: ProjectSort.byName, text: "By Name"},
                 {sort: ProjectSort.byCreated, text: "By Recently Created"},
-                {sort: ProjectSort.byModified, text: "By Recently Changed"}]);
+                {sort: ProjectSort.byModified, text: "By Recently Modified"}]);
 
             ProjectManager.instance.projects.addEventListener(CollectionEvent.COLLECTION_CHANGE, onChangeListProjects);
             ProjectManager.instance.projects.filterFunction = filterBySearch;
@@ -59,24 +59,8 @@
         private function onImportProject(event:MouseEvent):void
         {
             var p:PopupImportProject = new PopupImportProject();
-            p.callbackConfirm = importProject;
+            p.callbackConfirm = validateSort;
             PopupManager.open(p);
-        }
-
-        private function importProject(p:PopupImportProject):void
-        {
-            var u:Object = p.importedWorld;
-
-            var projectData:ProjectData = new ProjectData();
-            projectData.name = u.meta.name;
-            projectData.file = File.applicationStorageDirectory.resolvePath("projects").resolvePath(projectData.name + ".json");
-            projectData.dateCreated = u.meta.dateCreated;
-            projectData.dateModified = u.meta.dateModified;
-            projectData.engine = u.meta.engine;
-            projectData.content = u.content;
-
-            ProjectManager.instance.addProject(projectData);
-            validateSort();
         }
 
         private function createProject(p:PopupCreateProject):void

@@ -94,6 +94,7 @@
         private function validateEngine():void
         {
             var engineData:EngineData = EngineManager.instance.getEngineByVersion(projectData.engine);
+            buttonOpenWith.enabled = EngineManager.instance.hasAnyEnginesInstalled();
             buttonOpen.enabled = engineData.installDirectory.exists;
         }
 

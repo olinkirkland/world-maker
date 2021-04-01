@@ -5,7 +5,7 @@
                        showStatusBar="false"
                        frameRate="60"
                        width="1280"
-                       height="720"
+                       height="760"
                        tabChildren="false"
                        tabEnabled="false"
                        creationComplete="onCreationComplete(event)">

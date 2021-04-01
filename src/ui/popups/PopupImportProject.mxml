@@ -38,7 +38,7 @@
                 return;
 
             labelOriginalName.text = "Imported from \"" + importedWorld.meta.name + "\"";
-            labelOriginalFile.text = selectedFile.nativePath;
+            labelOriginalFile.text = selectedFile ? selectedFile.nativePath : "[Downloaded]";
             labelDateCreated.text = "Created " + Util.toRelativeDate(importedWorld.meta.dateCreated);
             labelDateModified.text = "Modified " + Util.toRelativeDate(importedWorld.meta.dateModified);
             labelEngine.text = "Engine " + importedWorld.meta.engine;
@@ -85,7 +85,19 @@
 
         private function confirmAndClose(event:MouseEvent):void
         {
-            if (callbackConfirm != null) callbackConfirm.apply(this, [this]);
+            var u:Object = importedWorld;
+
+            var projectData:ProjectData = new ProjectData();
+            projectData.name = u.meta.name;
+            projectData.file = File.applicationStorageDirectory.resolvePath("projects").resolvePath(projectData.name + ".json");
+            projectData.dateCreated = u.meta.dateCreated;
+            projectData.dateModified = u.meta.dateModified;
+            projectData.engine = u.meta.engine;
+            projectData.content = u.content;
+
+            ProjectManager.instance.addProject(projectData);
+
+            if (callbackConfirm != null) callbackConfirm.apply();
             close();
         }
 
