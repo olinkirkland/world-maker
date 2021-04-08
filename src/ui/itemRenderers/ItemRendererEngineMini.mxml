@@ -44,9 +44,7 @@
                 return;
 
             engineData = EngineData(value);
-            labelVersion.text = engineData.version.substr(0, engineData.version.indexOf(" "));
-            if (labelVersion.text.length == 0)
-                labelVersion.text = engineData.version;
+            labelVersion.text = engineData.version;
             labelVersion.toolTip = engineData.version;
 
             validateMode();

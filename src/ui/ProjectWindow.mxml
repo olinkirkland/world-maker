@@ -19,13 +19,16 @@
         {
         }
 
-        public function start(swfBytes:ByteArray, projectData:ProjectData):void
+        public function start(swfBytes:ByteArray, projectData:ProjectData, engine:String):void
         {
             var context:LoaderContext = new LoaderContext(false, new ApplicationDomain());
             context.allowLoadBytesCodeExecution = true;
             context.allowCodeImport = true;
 
-            title = projectData.name + " (" + projectData.engine + ")";
+            var str:String = engine;
+            if (engine != projectData.engine)
+                str += "/" + projectData.engine;
+            title = projectData.name + " (" + str + ")";
 
             swfLoader.loaderContext = context;
             swfLoader.source = swfBytes;
@@ -45,8 +48,13 @@
         {
             // Load projectData
             app = event.target.application;
-            app.load(projectData.content);
-            app.callbackSave = onSave;
+            try
+            {
+                app.load(projectData.content);
+                app.callbackSave = onSave;
+            } catch (error:Error)
+            {
+            }
 
             forceAppResize();
         }

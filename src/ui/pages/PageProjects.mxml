@@ -143,7 +143,7 @@
                         <s:Spacer height="5"/>
                         <s:Button label="Create World"
                                   skinClass="ui.skins.ButtonThemeSkin"
-                                  icon="{Icons.CastleNew}"
+                                  icon="{Icons.Add}"
                                   click="onCreateProject(event)"/>
                         <s:Button label="Import World"
                                   click="onImportProject(event)"/>

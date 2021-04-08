@@ -2,12 +2,6 @@ package global
 {
     public class Icons
     {
-        [Embed(source="/assets/icons/castle.png")]
-        public static const Castle:Class;
-
-        [Embed(source="/assets/icons/castle-new.png")]
-        public static const CastleNew:Class;
-
         [Embed(source="/assets/icons/home.png")]
         public static const Home:Class;
 

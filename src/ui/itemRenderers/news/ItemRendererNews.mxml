@@ -67,10 +67,8 @@
                           gap="15">
 
                     <s:Label id="labelTitle"
-                             maxWidth="240"
-                             maxDisplayedLines="1"
-                             showTruncationTip="true"
-                             styleName="header"/>
+                             styleName="header"
+                             width="100%"/>
 
                     <s:Label id="labelDate"
                              width="100%"/>

@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
                 xmlns:s="library://ns.adobe.com/flex/spark"
+                xmlns:c="ui.components.*"
                 width="100%"
                 minWidth="300"
                 autoDrawBackground="false"
@@ -31,7 +32,7 @@
 
             projectData = ProjectData(value);
             labelName.text = projectData.name;
-            labelEngine.text = "Engine " + projectData.engine;
+            labelEngine.text = projectData.engine;
 
             updateRelativeDateLabels();
             validateEngine();
@@ -129,7 +130,8 @@
                          showTruncationTip="true"
                          styleName="header"/>
 
-                <s:HGroup width="100%">
+                <s:HGroup width="100%"
+                          verticalAlign="middle">
                     <s:VGroup width="100%">
                         <s:Label id="labelDateModified"
                                  width="100%"/>
@@ -138,6 +140,8 @@
                                  width="100%"/>
                     </s:VGroup>
 
+                    <c:ColorBitmapImage source="{Icons.Logo}"
+                                        color="{Color.textLow}"/>
                     <s:Label id="labelEngine"/>
                 </s:HGroup>
 

@@ -81,15 +81,17 @@ package data
             }
         }
 
-        public function launch(projectData:ProjectData):void
+        public function launch(projectData:ProjectData, engine:String = null):void
         {
-            // Opens a new window in fullscreen with the version's swf
+            if (!engine)
+                engine = projectData.engine;
 
+            // Opens a new window in fullscreen with the version's swf
             var window:ProjectWindow = new ProjectWindow();
             window.open(true);
 
             // Load project swf
-            var swfFile:File = EngineManager.instance.getEngineByVersion(projectData.engine).installDirectory.resolvePath("Engine.swf");
+            var swfFile:File = EngineManager.instance.getEngineByVersion(engine).installDirectory.resolvePath("Engine.swf");
             var fileStream:FileStream = new FileStream();
             fileStream.open(swfFile, FileMode.READ);
 
@@ -97,7 +99,7 @@ package data
             fileStream.readBytes(swfBytes);
             fileStream.close();
 
-            window.start(swfBytes, projectData);
+            window.start(swfBytes, projectData, engine);
         }
 
         public function saveAll():void

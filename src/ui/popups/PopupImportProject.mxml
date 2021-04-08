@@ -41,7 +41,7 @@
             labelOriginalFile.text = selectedFile ? selectedFile.nativePath : "[Downloaded]";
             labelDateCreated.text = "Created " + Util.toRelativeDate(importedWorld.meta.dateCreated);
             labelDateModified.text = "Modified " + Util.toRelativeDate(importedWorld.meta.dateModified);
-            labelEngine.text = "Engine " + importedWorld.meta.engine;
+            labelEngine.text = "Engine \"" + importedWorld.meta.engine + "\"";
 
             validateGroupName();
         }

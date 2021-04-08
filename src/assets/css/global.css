@@ -51,6 +51,7 @@ s|Label.button {
 s|Label.header {
     paddingBottom: -5;
     color: #fcfcfb;
+    lineHeight: 22;
     fontWeight: bold;
     fontSize: 16;
 }

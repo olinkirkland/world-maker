@@ -8,6 +8,7 @@
         import data.EngineData;
         import data.EngineManager;
         import data.ProjectData;
+        import data.ProjectManager;
 
         import global.Color;
 
@@ -57,8 +58,8 @@
 
         private function confirm(event:MouseEvent):void
         {
+            ProjectManager.instance.launch(projectData, selectedEngine.version);
             close();
-
         }
         ]]>
     </fx:Script>
