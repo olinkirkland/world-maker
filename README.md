@@ -1,6 +1,8 @@
 # world-maker
 Wrapper Application for World Maker Engine
+
 Keeps track of installed versions and allows users to read updates, open recent files, and manage their own worlds files.
+
 The purpose of this application is to let users keep multiple versions of the Worlds software installed at the same time and open their files with any version (to ensure backwards compatibility).
 
 ![image](https://user-images.githubusercontent.com/7627555/156745612-89547aab-3263-4e21-bc33-d92e274999c1.png)
