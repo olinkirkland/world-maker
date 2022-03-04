@@ -1,4 +1,5 @@
-# world-maker
+# World Maker
+
 World Maker desktop application. Discontinued, moving away from Flash/Adobe Air toward web-based stuff.
 I'd like to return to this project and make a TypeScript web-app.
 
