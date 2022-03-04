@@ -1,9 +1,10 @@
 # world-maker
-Wrapper Application for World Maker Engine
+World Maker desktop application. Discontinued, moving away from Flash/Adobe Air toward web-based stuff.
+I'd like to return to this project and make a TypeScript web-app.
 
-Keeps track of installed versions and allows users to read updates, open recent files, and manage their own worlds files.
+This Adobe Air application keeps track of installed versions of the World Maker softare and allows users to read updates, open recent files, and manage their own worlds files.
 
-The purpose of this application is to let users keep multiple versions of the Worlds software installed at the same time and open their files with any version (to ensure backwards compatibility).
+The purpose of this application is to let users keep multiple versions of the World Maker software installed at the same time and open their local files with any version (to ensure backwards compatibility).
 
 ![image](https://user-images.githubusercontent.com/7627555/156746000-8c95cd57-daed-4498-99da-710403c26200.png)
 
